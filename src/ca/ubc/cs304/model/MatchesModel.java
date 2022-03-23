@@ -11,9 +11,10 @@ public class MatchesModel {
     private final String teamA;
     private final String cityB;
     private final String teamB;
+    private final int rentalfee;
     private final Date date;
 
-    public MatchesModel(String mid, String result, String oname, String stname, String cityA, String teamA, String cityB, String teamB, Date date) {
+    public MatchesModel(String mid, String result, String oname, String stname, String cityA, String teamA, String cityB, String teamB, int rentalfee, Date date) {
         this.mid = mid;
         this.result = result;
         this.oname = oname;
@@ -22,6 +23,7 @@ public class MatchesModel {
         this.teamA = teamA;
         this.cityB = cityB;
         this.teamB = teamB;
+        this.rentalfee = rentalfee;
         this.date = date;
     }
 
@@ -55,6 +57,10 @@ public class MatchesModel {
 
     public String getTeamB() {
         return teamB;
+    }
+
+    public int getRentalfee() {
+        return rentalfee;
     }
 
     public Date getDate() {
