@@ -1,9 +1,8 @@
 package ca.ubc.cs304.model;
 
 public class TeamsModel {
-    private String tname;
-    private City city;
-//    private String country;
+    private final String tname;
+    private final City city;
     private int winpercent;
 
     public TeamsModel(String tname, City city, int winpercent) {

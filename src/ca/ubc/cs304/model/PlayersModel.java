@@ -3,14 +3,14 @@ package ca.ubc.cs304.model;
 public class PlayersModel {
     private int jerseynumber;
     private String tname;
-    private String city;
+    private City city;
     private final String pname;
     private final int height;
     private final int weight;
     private int age;
-    private int clicencenumber;
+    private final int clicencenumber;
 
-    public PlayersModel(int jerseynumber, String tname, String city, String pname, int height, int weight, int age, int clicencenumber) {
+    public PlayersModel(int jerseynumber, String tname, City city, String pname, int height, int weight, int age, int clicencenumber) {
         this.jerseynumber = jerseynumber;
         this.tname = tname;
         this.city = city;
@@ -29,7 +29,7 @@ public class PlayersModel {
         return tname;
     }
 
-    public String getCity() {
+    public City getCity() {
         return city;
     }
 
@@ -65,11 +65,8 @@ public class PlayersModel {
         this.tname = tname;
     }
 
-    public void setCity(String city) {
+    public void setCity(City city) {
         this.city = city;
     }
 
-    public void setClicencenumber(int clicencenumber) {
-        this.clicencenumber = clicencenumber;
-    }
 }

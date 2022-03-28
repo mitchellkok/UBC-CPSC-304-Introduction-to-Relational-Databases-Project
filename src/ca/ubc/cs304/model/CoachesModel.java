@@ -2,8 +2,8 @@ package ca.ubc.cs304.model;
 
 public class CoachesModel {
     private final int clicensenumber;
-    private String cname;
-    private String gender;
+    private final String cname;
+    private final String gender;
     private int age;
 
     public CoachesModel(int clicensenumber, String cname, String gender, int age) {
@@ -27,5 +27,9 @@ public class CoachesModel {
 
     public int getAge() {
         return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }
