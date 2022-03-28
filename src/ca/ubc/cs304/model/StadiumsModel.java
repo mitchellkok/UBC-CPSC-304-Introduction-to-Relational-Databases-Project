@@ -3,7 +3,7 @@ package ca.ubc.cs304.model;
 public class StadiumsModel {
     private final String stname;
     private final String address;
-    private final int capacity;
+    private int capacity;
 
     public StadiumsModel(String stname, String address, int capacity) {
         this.stname = stname;
