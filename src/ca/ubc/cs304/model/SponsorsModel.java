@@ -2,7 +2,7 @@ package ca.ubc.cs304.model;
 
 public class SponsorsModel{
     private final String spname;
-    private final int contact;
+    private int contact;
 
     public SponsorsModel(String spname, int contact){
         this.spname = spname;
@@ -12,4 +12,6 @@ public class SponsorsModel{
     public String getSpname(){ return spname;}
 
     public int getContact(){ return contact; }
+
+    public void setContact(int contact){ this.contact = contact; }
 }

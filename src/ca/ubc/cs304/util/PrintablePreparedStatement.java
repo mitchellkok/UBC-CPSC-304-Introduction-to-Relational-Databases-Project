@@ -1,5 +1,7 @@
 package ca.ubc.cs304.util;
 
+import ca.ubc.cs304.model.City;
+
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
