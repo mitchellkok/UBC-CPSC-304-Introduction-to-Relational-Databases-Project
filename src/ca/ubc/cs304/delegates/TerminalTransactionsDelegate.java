@@ -28,6 +28,10 @@ public interface TerminalTransactionsDelegate {
 	public void updatePlayer(int jerseynumber, String tname, String city);
 
 	// Coaches
-	
+	public void deleteCoach(int jerseynumber, String tname, String city);
+	public void insertCoach(PlayersModel model);
+	public void showCoach();
+	public void updateCoach(int jerseynumber, String tname, String city);
+
 	public void terminalTransactionsFinished();
 }
