@@ -5,7 +5,6 @@ import ca.ubc.cs304.delegates.LoginWindowDelegate;
 import ca.ubc.cs304.delegates.TerminalTransactionsDelegate;
 import ca.ubc.cs304.model.BranchModel;
 import ca.ubc.cs304.model.PlayersModel;
-import ca.ubc.cs304.model.City;
 import ca.ubc.cs304.ui.LoginWindow;
 import ca.ubc.cs304.ui.TerminalTransactions;
 
@@ -56,40 +55,40 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	 * 
 	 * Insert a branch with the given info
 	 */
-    public void insertPlayer(PlayersModel model) {
-    	dbHandler.insertPlayer(model);
+    public void insertBranch(BranchModel model) {
+    	dbHandler.insertBranch(model);
     }
 
     /**
 	 * TermainalTransactionsDelegate Implementation
-	 * 
+	 *
 	 * Delete branch with given branch ID.
-	 */ 
-    public void deletePlayer(int jerseynumber, String tname, String city) {
-    	dbHandler.deletePlayer(jerseynumber, tname, city);
+	 */
+    public void deleteBranch(int branchId) {
+    	dbHandler.deleteBranch(branchId);
     }
-    
+
     /**
 	 * TermainalTransactionsDelegate Implementation
-	 * 
+	 *
 	 * Update the branch name for a specific ID
 	 */
 
-    public void updatePlayer(int jerseynumber, String tname, String country) {
-    	dbHandler.updatePlayer(jerseynumber, tname, country);
+    public void updateBranch(int branchId, String name) {
+    	dbHandler.updateBranch(branchId, name);
     }
 
     /**
 	 * TermainalTransactionsDelegate Implementation
-	 * 
+	 *
 	 * Displays information about varies bank branches.
 	 */
-    public void showPlayer() {
+    public void showBranch() {
     	BranchModel[] models = dbHandler.getBranchInfo();
-    	
+
     	for (int i = 0; i < models.length; i++) {
     		BranchModel model = models[i];
-    		
+
     		// simplified output formatting; truncation may occur
     		System.out.printf("%-10.10s", model.getId());
     		System.out.printf("%-20.20s", model.getName());
@@ -104,7 +103,7 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
     		} else {
     			System.out.printf("%-15.15s", model.getPhoneNumber());
     		}
-    		
+
     		System.out.println();
     	}
     }
@@ -114,8 +113,8 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	 *
 	 * Insert a branch with the given info
 	 */
-	public void insertBranch(BranchModel model) {
-		dbHandler.insertBranch(model);
+	public void insertPlayer(PlayersModel model) {
+		dbHandler.insertPlayer(model);
 	}
 
 	/**
@@ -123,8 +122,8 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	 *
 	 * Delete branch with given branch ID.
 	 */
-	public void deleteBranch(int branchId) {
-		dbHandler.deleteBranch(branchId);
+	public void deletePlayer(int jerseynumber, String tname, String city) {
+		dbHandler.deletePlayer(jerseynumber, tname, city);
 	}
 
 	/**
@@ -133,8 +132,8 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	 * Update the branch name for a specific ID
 	 */
 
-	public void updateBranch(int branchId, String name) {
-		dbHandler.updateBranch(branchId, name);
+	public void updatePlayer(int jerseynumber, String tname, String city, String pname, int age) {
+		dbHandler.updatePlayer(jerseynumber, tname, city, pname, age);
 	}
 
 	/**
@@ -142,7 +141,7 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	 *
 	 * Displays information about varies bank branches.
 	 */
-	public void showBranch() {
+	public void showPlayer() {
 		BranchModel[] models = dbHandler.getBranchInfo();
 
 		for (int i = 0; i < models.length; i++) {
@@ -166,31 +165,30 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
 			System.out.println();
 		}
 	}
-	
     /**
 	 * TerminalTransactionsDelegate Implementation
-	 * 
-     * The TerminalTransaction instance tells us that it is done with what it's 
+	 *
+     * The TerminalTransaction instance tells us that it is done with what it's
      * doing so we are cleaning up the connection since it's no longer needed.
-     */ 
+     */
     public void terminalTransactionsFinished() {
     	dbHandler.close();
     	dbHandler = null;
-    	
+
     	System.exit(0);
     }
-    
+
     /**
 	 * TerminalTransactionsDelegate Implementation
-	 * 
+	 *
      * The TerminalTransaction instance tells us that the user is fine with dropping any existing table
      * called branch and creating a new one for this project to use
-     */ 
+     */
 	public void databaseSetup() {
 		dbHandler.databaseSetup();;
-		
+
 	}
-    
+
 	/**
 	 * Main method called at launch time
 	 */

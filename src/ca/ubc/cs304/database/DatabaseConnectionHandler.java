@@ -169,7 +169,7 @@ public class DatabaseConnectionHandler {
 			ps.setInt(5, model.getHeight());
 			ps.setInt(6, model.getWeight());
 			ps.setInt(7, model.getAge());
-			ps.setInt(8, model.getClicencenumber());
+			ps.setInt(8, model.getClicensenumber());
 
 			if (model.getHeight() == 0) {
 				ps.setNull(5, java.sql.Types.INTEGER);
@@ -229,15 +229,26 @@ public class DatabaseConnectionHandler {
 		return result.toArray(new PlayersModel[result.size()]);
 	}
 
-	public void updatePlayer(int jerseynumber, String tname, String city) {
+	public void updatePlayer(int jerseynumber, String tname, String city, String pname, int age) {
 		try {
-			String query = "UPDATE branch SET branch_name = ? WHERE branch_id = ?";
+			String query = "UPDATE branch SET pname = ?, age = ? WHERE jerseynumber = ? and tname = ? and city = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setInt(1, jerseynumber);
+			ps.setString(2, tname);
+			ps.setString(3, city);
+			ps.setString(4, pname);
+			ps.setInt(5, age);
 
+			if (age == -1) {
+				ps.setNull(5, java.sql.Types.INTEGER);
+			} else {
+				ps.setInt(5, age);
+			}
 
 			int rowCount = ps.executeUpdate();
+
 			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " Branch " + id + " does not exist!");
+				System.out.println(WARNING_TAG + " Player " + jerseynumber + " in team " + tname + " in " + city + " does not exist!");
 			}
 
 			connection.commit();
@@ -248,6 +259,15 @@ public class DatabaseConnectionHandler {
 			rollbackConnection();
 		}
 	}
+
+	public void deleteCoach(int jerseynumber, String tname, String city){}
+
+	public void insertCoach(PlayersModel model){}
+
+	public void showCoach(){}
+
+	public void updateCoach(int jerseynumber, String tname, String city){}
+
 
 	public boolean login(String username, String password) {
 		try {

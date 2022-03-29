@@ -8,9 +8,9 @@ public class PlayersModel {
     private final int height;
     private final int weight;
     private int age;
-    private final int clicencenumber;
+    private final int clicensenumber;
 
-    public PlayersModel(int jerseynumber, String tname, String city, String pname, int height, int weight, int age, int clicencenumber) {
+    public PlayersModel(int jerseynumber, String tname, String city, String pname, int height, int weight, int age, int clicensenumber) {
         this.jerseynumber = jerseynumber;
         this.tname = tname;
         this.city = city;
@@ -18,7 +18,7 @@ public class PlayersModel {
         this.height = height;
         this.weight = weight;
         this.age = age;
-        this.clicencenumber = clicencenumber;
+        this.clicensenumber = clicensenumber;
     }
 
     public int getJerseynumber() {
@@ -49,8 +49,8 @@ public class PlayersModel {
         return age;
     }
 
-    public int getClicencenumber() {
-        return clicencenumber;
+    public int getClicensenumber() {
+        return clicensenumber;
     }
 
     public void setAge(int age) {
