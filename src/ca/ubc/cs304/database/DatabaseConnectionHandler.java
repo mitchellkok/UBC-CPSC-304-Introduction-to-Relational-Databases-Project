@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import ca.ubc.cs304.model.BranchModel;
 import ca.ubc.cs304.model.City;
 import ca.ubc.cs304.model.PlayersModel;
+import ca.ubc.cs304.model.TeamsModel;
 import ca.ubc.cs304.util.PrintablePreparedStatement;
 
 /**
@@ -264,9 +265,138 @@ public class DatabaseConnectionHandler {
 
 	public void insertCoach(PlayersModel model){}
 
-	public void showCoach(){}
+
 
 	public void updateCoach(int jerseynumber, String tname, String city){}
+
+
+
+
+
+
+
+	// Teams
+	// TODO
+	public void deleteTeam(String tname, String city){
+		try {
+			String query = "DELETE FROM team WHERE tname = ? AND city = ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, tname);
+			ps.setString(2, city);
+
+			int rowCount = ps.executeUpdate();
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " Team " + tname + " does not exist!");
+			}
+
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+	}
+
+	public void insertTeam(TeamsModel model){
+		try {
+			String query = "INSERT INTO team VALUES (?,?,?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, model.getTname());
+			ps.setString(2, model.getCity());
+			ps.setInt(3, model.getWinpercent());
+			if (model.getTname() == null) {
+				ps.setNull(1, java.sql.Types.INTEGER);
+			} else {
+				ps.setString(1, model.getTname());
+			}
+
+			if (model.getCity() == null) {
+				ps.setNull(2, java.sql.Types.INTEGER);
+			} else {
+				ps.setString(2, model.getCity());
+			}
+
+			if (model.getWinpercent() == -1) {
+				ps.setNull(3, java.sql.Types.INTEGER);
+			} else {
+				ps.setInt(3, model.getWinpercent());
+			}
+
+			ps.executeUpdate();
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+	}
+
+
+	public void updateTeam(String tname, String city, int winpercent){
+		try {
+			String query = "UPDATE team SET winpercent = ? WHERE tname = ? AND city = ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, tname);
+			ps.setString(2, city);
+			ps.setInt(3, winpercent);
+
+
+			int rowCount = ps.executeUpdate();
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " Team " + tname + " does not exist!");
+			}
+
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+	}
+
+
+
+	public TeamsModel[] getTeamInfo(){
+		ArrayList<TeamsModel> result = new ArrayList<TeamsModel>();
+
+		try {
+			String query = "SELECT * FROM teams";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				TeamsModel model = new TeamsModel(
+						rs.getString("tname"),
+						rs.getString("city"),
+						rs.getInt("winpercent"));
+				result.add(model);
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		return result.toArray(new TeamsModel[result.size()]);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	public boolean login(String username, String password) {
@@ -285,6 +415,8 @@ public class DatabaseConnectionHandler {
 			return false;
 		}
 	}
+
+
 
 	private void rollbackConnection() {
 		try  {

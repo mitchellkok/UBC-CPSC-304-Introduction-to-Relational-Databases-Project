@@ -3,6 +3,7 @@ package ca.ubc.cs304.delegates;
 import ca.ubc.cs304.model.BranchModel;
 import ca.ubc.cs304.model.PlayersModel;
 import ca.ubc.cs304.model.City;
+import ca.ubc.cs304.model.TeamsModel;
 
 /**
  * This interface uses the delegation design pattern where instead of having
@@ -32,6 +33,15 @@ public interface TerminalTransactionsDelegate {
 	public void insertCoach(PlayersModel model);
 	public void showCoach();
 	public void updateCoach(int jerseynumber, String tname, String city);
+
+
+	// Teams
+	public void deleteTeam(String tname, String city);
+	public void insertTeam(TeamsModel model);
+	public void showTeam();
+	public void updateTeam(String tname, String city, int winpercent);
+
+
 
 	public void terminalTransactionsFinished();
 }
