@@ -3,6 +3,7 @@ package ca.ubc.cs304.delegates;
 import ca.ubc.cs304.model.BranchModel;
 import ca.ubc.cs304.model.PlayersModel;
 import ca.ubc.cs304.model.City;
+import ca.ubc.cs304.model.CoachesModel;
 import ca.ubc.cs304.model.TeamsModel;
 
 /**
@@ -27,12 +28,14 @@ public interface TerminalTransactionsDelegate {
 	public void insertPlayer(PlayersModel model);
 	public void showPlayer();
 	public void updatePlayer(int jerseynumber, String tname, String city);
+	public void getCoachName(int jerseynumber, String tname, String city);
+	public void getAvgHeightInCity();
 
 	// Coaches
-	public void deleteCoach(int jerseynumber, String tname, String city);
-	public void insertCoach(PlayersModel model);
+	public void deleteCoach(int clicensenumber);
+	public void insertCoach(CoachesModel model);
 	public void showCoach();
-	public void updateCoach(int jerseynumber, String tname, String city);
+	public void updateCoach(int clicensenumber);
 
 
 	// Teams
