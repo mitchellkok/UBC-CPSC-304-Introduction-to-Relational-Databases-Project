@@ -4,6 +4,7 @@ import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.delegates.LoginWindowDelegate;
 import ca.ubc.cs304.delegates.TerminalTransactionsDelegate;
 import ca.ubc.cs304.model.BranchModel;
+import ca.ubc.cs304.model.CoachesModel;
 import ca.ubc.cs304.model.PlayersModel;
 import ca.ubc.cs304.model.TeamsModel;
 import ca.ubc.cs304.ui.LoginWindow;
@@ -12,11 +13,11 @@ import ca.ubc.cs304.ui.TerminalTransactions;
 /**
  * This is the main controller class that will orchestrate everything.
  */
-public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
+public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	private DatabaseConnectionHandler dbHandler = null;
 	private LoginWindow loginWindow = null;
 
-	public Bank() {
+	public Soccer() {
 		dbHandler = new DatabaseConnectionHandler();
 	}
 	
@@ -109,58 +110,95 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
     	}
     }
 
-	/**
-	 * TermainalTransactionsDelegate Implementation
-	 *
-	 * Insert a branch with the given info
-	 */
+	// Player
 	public void insertPlayer(PlayersModel model) {
 		dbHandler.insertPlayer(model);
 	}
 
-	/**
-	 * TermainalTransactionsDelegate Implementation
-	 *
-	 * Delete branch with given branch ID.
-	 */
 	public void deletePlayer(int jerseynumber, String tname, String city) {
 		dbHandler.deletePlayer(jerseynumber, tname, city);
 	}
-
-	/**
-	 * TermainalTransactionsDelegate Implementation
-	 *
-	 * Update the branch name for a specific ID
-	 */
 
 	public void updatePlayer(int jerseynumber, String tname, String city, String pname, int age) {
 		dbHandler.updatePlayer(jerseynumber, tname, city, pname, age);
 	}
 
-	/**
-	 * TermainalTransactionsDelegate Implementation
-	 *
-	 * Displays information about varies bank branches.
-	 */
 	public void showPlayer() {
-		BranchModel[] models = dbHandler.getBranchInfo();
+		PlayersModel[] models = dbHandler.getPlayerInfo();
 
 		for (int i = 0; i < models.length; i++) {
-			BranchModel model = models[i];
+			PlayersModel model = models[i];
 
 			// simplified output formatting; truncation may occur
-			System.out.printf("%-10.10s", model.getId());
-			System.out.printf("%-20.20s", model.getName());
-			if (model.getAddress() == null) {
+			System.out.printf("%-10.10s", model.getJerseynumber());
+			System.out.printf("%-20.20s", model.getTname());
+			System.out.printf("%-20.20s", model.getCity());
+			System.out.printf("%-20.20s", model.getPname());
+			System.out.printf("%-20.20s", model.getHeight());
+			if (model.getHeight() == 0) {
 				System.out.printf("%-20.20s", " ");
 			} else {
-				System.out.printf("%-20.20s", model.getAddress());
+				System.out.printf("%-20.20s", model.getHeight());
 			}
-			System.out.printf("%-15.15s", model.getCity());
-			if (model.getPhoneNumber() == 0) {
-				System.out.printf("%-15.15s", " ");
+			System.out.printf("%-20.20s", model.getWeight());
+			if (model.getHeight() == 0) {
+				System.out.printf("%-20.20s", " ");
 			} else {
-				System.out.printf("%-15.15s", model.getPhoneNumber());
+				System.out.printf("%-20.20s", model.getWeight());
+			}
+			System.out.printf("%-20.20s", model.getAge());
+			if (model.getHeight() == -1) {
+				System.out.printf("%-20.20s", " ");
+			} else {
+				System.out.printf("%-20.20s", model.getAge());
+			}
+			System.out.printf("%-20.20s", model.getClicensenumber());
+
+			System.out.println();
+		}
+	}
+
+	public void getCoachName(int jerseynumber, String tname, String city){
+		dbHandler.getCoachName(jerseynumber, tname, city);
+	}
+
+	public void getAvgHeightInCity(){
+		dbHandler.getAvgHeightInCity();
+	}
+
+	// Coach
+	public void insertCoach(CoachesModel model) {
+		dbHandler.insertCoach(model);
+	}
+
+	public void deleteCoach(int clicensenumber) {
+		dbHandler.deleteCoach(clicensenumber);
+	}
+
+	public void updateCoach(int clicensenumber, int age) {
+		dbHandler.updateCoach(clicensenumber, age);
+	}
+
+	public void showCoach() {
+		CoachesModel[] models = dbHandler.getCoachInfo();
+
+		for (int i = 0; i < models.length; i++) {
+			CoachesModel model = models[i];
+
+			// simplified output formatting; truncation may occur
+			System.out.printf("%-10.10s", model.getClicensenumber());
+			System.out.printf("%-20.20s", model.getCname());
+			System.out.printf("%-20.20s", model.getGender());
+			if (model.getGender() == " ") {
+				System.out.printf("%-20.20s", " ");
+			} else {
+				System.out.printf("%-20.20s", model.getGender());
+			}
+			System.out.printf("%-20.20s", model.getAge());
+			if (model.getAge() == -1) {
+				System.out.printf("%-20.20s", " ");
+			} else {
+				System.out.printf("%-20.20s", model.getAge());
 			}
 
 			System.out.println();
@@ -250,7 +288,7 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	 * Main method called at launch time
 	 */
 	public static void main(String args[]) {
-		Bank bank = new Bank();
+		Soccer bank = new Soccer();
 		bank.start();
 	}
 }
