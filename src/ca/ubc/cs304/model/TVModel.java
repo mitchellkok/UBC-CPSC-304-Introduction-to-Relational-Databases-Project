@@ -3,8 +3,8 @@ package ca.ubc.cs304.model;
 public class TVModel{
     private final String bname;
     private final String country;
-    private final int contact;
-    private final int channelnumber;
+    private int contact;
+    private int channelnumber;
 
     public TVModel(String bname, String country, int contact, int channelnumber) {
         this.bname = bname;
@@ -14,7 +14,14 @@ public class TVModel{
     }
 
     public String getBname(){ return bname; }
+
     public String getCountry(){ return country; }
+
     public int getContact(){ return contact; }
+
+    public void setContact(int contact){ this.contact = contact; }
+
     public int getChannelnumber(){ return channelnumber; }
+
+    public void setChannelnumber(int channelnumber){ this.channelnumber = channelnumber; }
 }

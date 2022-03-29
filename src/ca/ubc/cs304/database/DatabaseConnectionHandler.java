@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import ca.ubc.cs304.model.BranchModel;
+import ca.ubc.cs304.model.City;
+import ca.ubc.cs304.model.PlayersModel;
 import ca.ubc.cs304.util.PrintablePreparedStatement;
 
 /**
@@ -118,6 +120,120 @@ public class DatabaseConnectionHandler {
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, name);
 			ps.setInt(2, id);
+
+			int rowCount = ps.executeUpdate();
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " Branch " + id + " does not exist!");
+			}
+
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+	}
+
+	public void deletePlayer(int jerseynumber, String tname, String city) {
+		try {
+			String query = "DELETE FROM branch WHERE jerseynumber = ? and tname = ? and city = ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setInt(1, jerseynumber);
+			ps.setString(2, tname);
+			ps.setString(3, city);
+
+			int rowCount = ps.executeUpdate();
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " Player " + jerseynumber + " in team " + tname + " in " + city + " does not exist!");
+			}
+
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+	}
+
+	// Players
+	public void insertPlayer(PlayersModel model) {
+		try {
+			String query = "INSERT INTO Players VALUES (?,?,?,?,?,?,?,?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setInt(1, model.getJerseynumber());
+			ps.setString(2, model.getTname());
+			ps.setString(3, model.getCity());
+			ps.setString(4, model.getPname());
+			ps.setInt(5, model.getHeight());
+			ps.setInt(6, model.getWeight());
+			ps.setInt(7, model.getAge());
+			ps.setInt(8, model.getClicencenumber());
+
+			if (model.getHeight() == 0) {
+				ps.setNull(5, java.sql.Types.INTEGER);
+			} else {
+				ps.setInt(5, model.getHeight());
+			}
+
+			if (model.getWeight() == 0) {
+				ps.setNull(6, java.sql.Types.INTEGER);
+			} else {
+				ps.setInt(6, model.getWeight());
+			}
+
+			if (model.getAge() == -1) {
+				ps.setNull(7, java.sql.Types.INTEGER);
+			} else {
+				ps.setInt(7, model.getAge());
+			}
+
+			ps.executeUpdate();
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+	}
+
+	public PlayersModel[] getPlayerInfo() {
+		ArrayList<PlayersModel> result = new ArrayList<PlayersModel>();
+
+		try {
+			String query = "SELECT * FROM Players";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				PlayersModel model = new PlayersModel(
+						rs.getInt("player_jerseynumber"),
+						rs.getString("player_tname"),
+						rs.getString("player_city"),
+						rs.getString("player_pname"),
+						rs.getInt("player_height"),
+						rs.getInt("player_weight"),
+						rs.getInt("player_age"),
+						rs.getInt("player_clicencenumber"));
+				result.add(model);
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		return result.toArray(new PlayersModel[result.size()]);
+	}
+
+	public void updatePlayer(int jerseynumber, String tname, String city) {
+		try {
+			String query = "UPDATE branch SET branch_name = ? WHERE branch_id = ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+
 
 			int rowCount = ps.executeUpdate();
 			if (rowCount == 0) {
