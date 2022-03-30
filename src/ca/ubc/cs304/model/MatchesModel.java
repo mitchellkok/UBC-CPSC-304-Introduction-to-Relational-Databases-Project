@@ -67,7 +67,7 @@ public class MatchesModel {
         return teamB;
     }
 
-    public int getRentalfee() {
+    public int getRentalFee() {
         return rentalfee;
     }
 
