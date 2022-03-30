@@ -27,7 +27,8 @@ public interface TerminalTransactionsDelegate {
 	public void deletePlayer(int jerseynumber, String tname, String city);
 	public void insertPlayer(PlayersModel model);
 	public void showPlayer();
-	public void updatePlayer(int jerseynumber, String tname, String city, String pname, int age);
+	public void updatePlayerName(int jerseynumber, String tname, String city, String pname);
+	public void updatePlayerAge(int jerseynumber, String tname, String city, int age);
 	public void getCoachName(int jerseynumber, String tname, String city);
 	public void getAvgHeightInCity();
 
