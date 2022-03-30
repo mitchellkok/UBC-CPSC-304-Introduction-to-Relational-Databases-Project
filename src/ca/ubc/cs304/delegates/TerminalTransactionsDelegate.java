@@ -44,6 +44,11 @@ public interface TerminalTransactionsDelegate {
 	public void showTeam();
 	public void updateTeam(String tname, String city, int winpercent);
 
+	public void getAvgScoreInTeam();
+
+
+	// Matches
+	public void getNumMatchPlayed();
 
 
 	public void terminalTransactionsFinished();

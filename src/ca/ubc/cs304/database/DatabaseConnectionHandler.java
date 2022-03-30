@@ -522,6 +522,58 @@ public class DatabaseConnectionHandler {
 	}
 
 
+
+
+	// Average score of each team
+	// TODO!!! result in Matches cant be separated, thus need separate columns
+	public void getAvgScoreInTeam() {
+		try{
+			String query = "SELECT (SUM(resultA) + SUM(resultB)) / (COUNT(teamA) + COUNT(teamB))  FROM Matches GROUP BY (teamA UNION teamB) ";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+
+			int rowCount = ps.executeUpdate();
+
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " No city exists!");
+			}
+
+			connection.commit();
+
+			ps.close();
+		}
+		catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+
+	}
+
+
+
+	// Number of matches a team has played
+	public void getNumMatchPlayed() {
+		try{
+			String query = "SELECT COUNT(teamA) + COUNT(teamB) FROM Matches GROUP BY (teamA UNION teamB)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+
+			int rowCount = ps.executeUpdate();
+
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " No city exists!");
+			}
+
+			connection.commit();
+
+			ps.close();
+		}
+		catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+
+	}
+
+
 	// Matches
 	// TODO
 	public void deleteMatch(String mid){
