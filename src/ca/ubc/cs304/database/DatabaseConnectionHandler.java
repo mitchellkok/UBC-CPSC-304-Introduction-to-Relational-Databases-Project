@@ -1,9 +1,6 @@
 package ca.ubc.cs304.database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 import ca.ubc.cs304.model.BranchModel;
@@ -631,87 +628,89 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
+	public void updateMatchResult(String mid, String result){
+		try {
+			String query = "UPDATE matches SET result = ? WHERE mid = ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(2, mid);
 
-	// TODO
-//	public void updateMatch(String mid){
-//		try {
-//			String query = "UPDATE team SET winpercent = ? WHERE mid = ?";
-//			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-//			ps.setString(1, model.getMid());
-//			ps.setString(3, model.getOname());
-//			ps.setString(4, model.getStname());
-//			ps.setString(5, model.getCityA());
-//			ps.setString(6, model.getTeamA());
-//			ps.setString(7, model.getCityB());
-//			ps.setString(8, model.getTeamB());
-//			ps.setInt(9, model.getRentalfee());
-//
-//			if (model.getResult() == null) {
-//				ps.setNull(2, java.sql.Types.INTEGER);
-//			} else {
-//				ps.setString(2, model.getResult());
-//			}
-//
-//			if (model.getDate() == null) {
-//				ps.setNull(10, java.sql.Types.INTEGER);
-//			} else {
-//				long dateLong = model.getDate().getTime();
-//				ps.setDate(10, new java.sql.Date(dateLong));
-//			}
-//
-//			int rowCount = ps.executeUpdate();
-//			if (rowCount == 0) {
-//				System.out.println(WARNING_TAG + " Team " + tname + " does not exist!");
-//			}
-//
-//			connection.commit();
-//
-//			ps.close();
-//		} catch (SQLException e) {
-//			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//			rollbackConnection();
-//		}
-//	}
-//
-//
-//
-//	public TeamsModel[] getTeamInfo(){
-//		ArrayList<TeamsModel> result = new ArrayList<TeamsModel>();
-//
-//		try {
-//			String query = "SELECT * FROM teams";
-//			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-//			ResultSet rs = ps.executeQuery();
-//
-//			while(rs.next()) {
-//				TeamsModel model = new TeamsModel(
-//						rs.getString("tname"),
-//						rs.getString("city"),
-//						rs.getInt("winpercent"));
-//				result.add(model);
-//			}
-//
-//			rs.close();
-//			ps.close();
-//		} catch (SQLException e) {
-//			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//		}
-//
-//		return result.toArray(new TeamsModel[result.size()]);
-//	}
-//
+			if (result == null) {
+				ps.setNull(1, java.sql.Types.INTEGER);
+			} else {
+				ps.setString(1, result);
+			}
 
+			int rowCount = ps.executeUpdate();
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " Match " + mid + " does not exist!");
+			}
 
+			connection.commit();
 
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+	}
 
+	public void updateMatchDate(String mid, Date date){
+		try {
+			String query = "UPDATE matches SET date = ? WHERE mid = ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(2, mid);
 
+			if (date == null) {
+				ps.setNull(1, java.sql.Types.INTEGER);
+			} else {
+				ps.setDate(1, date);
+			}
 
+			int rowCount = ps.executeUpdate();
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " Match " + mid + " does not exist!");
+			}
 
+			connection.commit();
 
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+	}
 
+	public MatchesModel[] getMatchInfo(){
+		ArrayList<MatchesModel> result = new ArrayList<MatchesModel>();
 
+		try {
+			String query = "SELECT * FROM matches";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
 
+			while(rs.next()) {
+				MatchesModel model = new MatchesModel(
+						rs.getString("mid"),
+						rs.getString("oname"),
+						rs.getString("stname"),
+						rs.getString("cityA"),
+						rs.getString("teamA"),
+						rs.getString("cityB"),
+						rs.getString("teamB"),
+						rs.getInt("rentalfee"),
+						rs.getDate("date"),
+						rs.getString("result"));
+				result.add(model);
+			}
 
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		return result.toArray(new MatchesModel[result.size()]);
+	}
 
 
 
