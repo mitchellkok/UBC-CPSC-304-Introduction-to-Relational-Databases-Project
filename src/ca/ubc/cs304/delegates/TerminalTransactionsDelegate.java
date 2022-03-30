@@ -43,7 +43,6 @@ public interface TerminalTransactionsDelegate {
 	public void insertTeam(TeamsModel model);
 	public void showTeam();
 	public void updateTeam(String tname, String city, int winpercent);
-
 	public void getAvgWinPercent();
 
 
