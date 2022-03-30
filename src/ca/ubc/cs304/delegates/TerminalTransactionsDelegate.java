@@ -27,7 +27,7 @@ public interface TerminalTransactionsDelegate {
 	public void deletePlayer(int jerseynumber, String tname, String city);
 	public void insertPlayer(PlayersModel model);
 	public void showPlayer();
-	public void updatePlayer(int jerseynumber, String tname, String city);
+	public void updatePlayer(int jerseynumber, String tname, String city, String pname, int age);
 	public void getCoachName(int jerseynumber, String tname, String city);
 	public void getAvgHeightInCity();
 
@@ -35,7 +35,7 @@ public interface TerminalTransactionsDelegate {
 	public void deleteCoach(int clicensenumber);
 	public void insertCoach(CoachesModel model);
 	public void showCoach();
-	public void updateCoach(int clicensenumber);
+	public void updateCoach(int clicensenumber, int age);
 
 
 	// Teams
