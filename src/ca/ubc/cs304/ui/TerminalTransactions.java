@@ -86,7 +86,7 @@ public class TerminalTransactions {
 						System.out.println("1. Insert player");
 						System.out.println("2. Delete player");
 						System.out.println("3. Update player name");
-						System.out.println("4. Update player age")
+						System.out.println("4. Update player age");
 						System.out.println("5. Show players");
 						System.out.println("6. Show coach name of players");
 						System.out.println("7. Show average height of players in each city");
@@ -112,8 +112,10 @@ public class TerminalTransactions {
 									handleUpdatePlayerAgeOption();
 									break;
 								case 5:
+									delegate.showPlayer();
 									break;
 								case 6:
+									handleShowCoachOfPlayer();
 									break;
 								case 7:
 									handleQuitOption();
@@ -204,19 +206,19 @@ public class TerminalTransactions {
 	private void handleDeletePlayerOption() {
 		int jerseynumber = INVALID_INPUT;
 		while (jerseynumber == INVALID_INPUT) {
-			System.out.print("Please enter the jersey number you wish to insert: ");
+			System.out.print("Please enter the jersey number of the player you wish to delete: ");
 			jerseynumber = readInteger(false);
 		}
 
 		String tname = null;
 		while (tname == null || tname.length() <= 0) {
-			System.out.print("Please enter the team name you wish to insert: ");
+			System.out.print("Please enter the team name of the player you wish to delete: ");
 			tname = readLine().trim();
 		}
 
 		String city = null;
 		while (city == null || city.length() <= 0) {
-			System.out.print("Please enter the city you wish to insert: ");
+			System.out.print("Please enter the city of the player you wish to delete: ");
 			city = readLine().trim();
 		}
 
@@ -226,7 +228,7 @@ public class TerminalTransactions {
 	private void handleUpdatePlayerNameOption() {
 		int jerseynumber = INVALID_INPUT;
 		while (jerseynumber == INVALID_INPUT) {
-			System.out.print("Please enter the jersey number you wish to insert: ");
+			System.out.print("Please enter the jersey number of the player you wish to insert: ");
 			jerseynumber = readInteger(false);
 		}
 
@@ -278,6 +280,28 @@ public class TerminalTransactions {
 		}
 
 		delegate.updatePlayerAge(jerseynumber, tname, city, age);
+	}
+
+	private void handleShowCoachOfPlayer(){
+		int jerseynumber = INVALID_INPUT;
+		while (jerseynumber == INVALID_INPUT) {
+			System.out.print("Please enter the jersey number you wish to insert: ");
+			jerseynumber = readInteger(false);
+		}
+
+		String tname = null;
+		while (tname == null || tname.length() <= 0) {
+			System.out.print("Please enter the team name you wish to insert: ");
+			tname = readLine().trim();
+		}
+
+		String city = null;
+		while (city == null || city.length() <= 0) {
+			System.out.print("Please enter the city you wish to insert: ");
+			city = readLine().trim();
+		}
+
+		delegate.getCoachName(jerseynumber, tname, city);
 	}
 	
 	private void handleDeleteOption() {
