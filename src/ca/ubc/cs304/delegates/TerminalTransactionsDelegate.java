@@ -44,7 +44,7 @@ public interface TerminalTransactionsDelegate {
 	public void showTeam();
 	public void updateTeam(String tname, String city, int winpercent);
 
-	public void getAvgScoreInTeam();
+	public void getAvgWinPercent();
 
 
 	// Matches
