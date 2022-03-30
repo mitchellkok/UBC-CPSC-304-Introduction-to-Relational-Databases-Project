@@ -751,8 +751,6 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
-
-
 	private void rollbackConnection() {
 		try  {
 			connection.rollback();
