@@ -294,7 +294,7 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 	 * Main method called at launch time
 	 */
 	public static void main(String args[]) {
-		Soccer bank = new Soccer();
-		bank.start();
+		Soccer soccer = new Soccer();
+		soccer.start();
 	}
 }
