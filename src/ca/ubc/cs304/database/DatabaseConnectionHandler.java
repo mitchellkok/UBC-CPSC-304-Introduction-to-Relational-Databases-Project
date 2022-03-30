@@ -524,11 +524,10 @@ public class DatabaseConnectionHandler {
 
 
 
-	// Average score of each team
-	// TODO!!! result in Matches cant be separated, thus need separate columns
-	public void getAvgScoreInTeam() {
+	// Average winpercent of all teams
+	public void getAvgWinPercent() {
 		try{
-			String query = "SELECT (SUM(resultA) + SUM(resultB)) / (COUNT(teamA) + COUNT(teamB))  FROM Matches GROUP BY (teamA UNION teamB) ";
+			String query = "SELECT AVG(winpercent) FROM Teams";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
