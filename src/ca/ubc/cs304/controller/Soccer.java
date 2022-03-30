@@ -118,8 +118,12 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 		dbHandler.deletePlayer(jerseynumber, tname, city);
 	}
 
-	public void updatePlayer(int jerseynumber, String tname, String city, String pname, int age) {
-		dbHandler.updatePlayer(jerseynumber, tname, city, pname, age);
+	public void updatePlayerName(int jerseynumber, String tname, String city, String pname) {
+		dbHandler.updatePlayerName(jerseynumber, tname, city, pname);
+	}
+
+	public void updatePlayerAge(int jerseynumber, String tname, String city, int age) {
+		dbHandler.updatePlayerAge(jerseynumber, tname, city, age);
 	}
 
 	public void showPlayer() {

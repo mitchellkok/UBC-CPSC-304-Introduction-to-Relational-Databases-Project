@@ -85,11 +85,12 @@ public class TerminalTransactions {
 						System.out.println();
 						System.out.println("1. Insert player");
 						System.out.println("2. Delete player");
-						System.out.println("3. Update player");
-						System.out.println("4. Show players");
-						System.out.println("5. Show coach name of players");
-						System.out.println("6. Show average height of players in each city");
-						System.out.println("7. Quit");
+						System.out.println("3. Update player name");
+						System.out.println("4. Update player age")
+						System.out.println("5. Show players");
+						System.out.println("6. Show coach name of players");
+						System.out.println("7. Show average height of players in each city");
+						System.out.println("8. Quit");
 						System.out.print("Please choose one of the above 7 options: ");
 
 						choice2 = readInteger(false);
@@ -102,10 +103,13 @@ public class TerminalTransactions {
 									handleInsertPlayerOption();
 									break;
 								case 2:
+									handleDeletePlayerOption();
 									break;
 								case 3:
+									handleUpdatePlayerNameOption();
 									break;
 								case 4:
+									handleUpdatePlayerAgeOption();
 									break;
 								case 5:
 									break;
@@ -120,8 +124,7 @@ public class TerminalTransactions {
 							}
 						}
 					}
-					handleInsertOption(); 
-					break;
+
 				case 2:  
 					handleDeleteOption(); 
 					break;
@@ -199,17 +202,82 @@ public class TerminalTransactions {
 	}
 
 	private void handleDeletePlayerOption() {
-
-		/**
-		int branchId = INVALID_INPUT;
-		while (branchId == INVALID_INPUT) {
-			System.out.print("Please enter the branch ID you wish to delete: ");
-			branchId = readInteger(false);
-			if (branchId != INVALID_INPUT) {
-				delegate.deleteBranch(branchId);
-			}
+		int jerseynumber = INVALID_INPUT;
+		while (jerseynumber == INVALID_INPUT) {
+			System.out.print("Please enter the jersey number you wish to insert: ");
+			jerseynumber = readInteger(false);
 		}
-		 **/
+
+		String tname = null;
+		while (tname == null || tname.length() <= 0) {
+			System.out.print("Please enter the team name you wish to insert: ");
+			tname = readLine().trim();
+		}
+
+		String city = null;
+		while (city == null || city.length() <= 0) {
+			System.out.print("Please enter the city you wish to insert: ");
+			city = readLine().trim();
+		}
+
+		delegate.deletePlayer(jerseynumber, tname, city);
+	}
+
+	private void handleUpdatePlayerNameOption() {
+		int jerseynumber = INVALID_INPUT;
+		while (jerseynumber == INVALID_INPUT) {
+			System.out.print("Please enter the jersey number you wish to insert: ");
+			jerseynumber = readInteger(false);
+		}
+
+		String tname = null;
+		while (tname == null || tname.length() <= 0) {
+			System.out.print("Please enter the team name you wish to insert: ");
+			tname = readLine().trim();
+		}
+
+		String city = null;
+		while (city == null || city.length() <= 0) {
+			System.out.print("Please enter the city you wish to insert: ");
+			city = readLine().trim();
+		}
+
+		String pname = null;
+		while (pname == null || pname.length() <= 0) {
+			System.out.print("Please enter the player name you wish to insert: ");
+			pname = readLine().trim();
+		}
+
+		delegate.updatePlayerName(jerseynumber, tname, city, pname);
+	}
+
+	private void handleUpdatePlayerAgeOption() {
+		int jerseynumber = INVALID_INPUT;
+		while (jerseynumber == INVALID_INPUT) {
+			System.out.print("Please enter the jersey number you wish to insert: ");
+			jerseynumber = readInteger(false);
+		}
+
+		String tname = null;
+		while (tname == null || tname.length() <= 0) {
+			System.out.print("Please enter the team name you wish to insert: ");
+			tname = readLine().trim();
+		}
+
+		String city = null;
+		while (city == null || city.length() <= 0) {
+			System.out.print("Please enter the city you wish to insert: ");
+			city = readLine().trim();
+		}
+
+		// age is allowed to be null if the user plan not to update it
+		int age = INVALID_INPUT;
+		while (age == INVALID_INPUT){
+			System.out.print("Please enter the height you wish to insert (enter -1 if you wish to leave it empty): ");
+			age = readInteger(false);
+		}
+
+		delegate.updatePlayerAge(jerseynumber, tname, city, age);
 	}
 	
 	private void handleDeleteOption() {

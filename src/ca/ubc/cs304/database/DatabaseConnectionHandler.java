@@ -227,19 +227,42 @@ public class DatabaseConnectionHandler {
 		return result.toArray(new PlayersModel[result.size()]);
 	}
 
-	public void updatePlayer(int jerseynumber, String tname, String city, String pname, int age) {
+	public void updatePlayerName(int jerseynumber, String tname, String city, String pname) {
 		try {
-			String query = "UPDATE branch SET pname = ?, age = ? WHERE jerseynumber = ? and tname = ? and city = ?";
+			String query = "UPDATE branch SET pname = ? WHERE jerseynumber = ? and tname = ? and city = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, pname);
-			ps.setInt(3, jerseynumber);
-			ps.setString(4, tname);
-			ps.setString(5, city);
+			ps.setInt(2, jerseynumber);
+			ps.setString(3, tname);
+			ps.setString(4, city);
+
+			int rowCount = ps.executeUpdate();
+
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " Player " + jerseynumber + " in team " + tname + " in " + city + " does not exist!");
+			}
+
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+	}
+
+	public void updatePlayerAge(int jerseynumber, String tname, String city, int age) {
+		try {
+			String query = "UPDATE branch SET age = ? WHERE jerseynumber = ? and tname = ? and city = ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setInt(2, jerseynumber);
+			ps.setString(3, tname);
+			ps.setString(4, city);
 
 			if (age == -1) {
-				ps.setNull(2, java.sql.Types.INTEGER);
+				ps.setNull(1, java.sql.Types.INTEGER);
 			} else {
-				ps.setInt(2, age);
+				ps.setInt(1, age);
 			}
 
 			int rowCount = ps.executeUpdate();
