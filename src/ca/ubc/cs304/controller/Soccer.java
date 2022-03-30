@@ -158,6 +158,8 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 		}
 	}
 
+
+
 	public void getCoachName(int jerseynumber, String tname, String city){
 		dbHandler.getCoachName(jerseynumber, tname, city);
 	}
@@ -207,8 +209,6 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 
 
 
-
-
 	// Teams
 	@Override
 	public void deleteTeam(String tname, String city) {
@@ -254,10 +254,16 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 
 	}
 
+	@Override
+	public void getAvgWinPercent() {
+		dbHandler.getAvgWinPercent();
+	}
 
+	@Override
+	public void getNumMatchPlayed() {
+		dbHandler.getNumMatchPlayed();
 
-
-
+	}
 
 
 	/**
