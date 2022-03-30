@@ -710,7 +710,7 @@ public class DatabaseConnectionHandler {
 	// Number of matches a team has played
 	public void getAllTVWithAllMatches() {
 		try{
-			String query = "SELECT bname FROM TV T WHERE NOT EXISTS((SELECT M.mid FROM Matches M) EXCEPT (SELECT L.mid FROM Livestreams L WHERE L.bname = T.bname))";
+			String query = "SELECT T.bname FROM TV T WHERE NOT EXISTS((SELECT M.mid FROM Matches M) MINUS (SELECT L.mid FROM Livestreams L WHERE L.bname = T.bname))";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
