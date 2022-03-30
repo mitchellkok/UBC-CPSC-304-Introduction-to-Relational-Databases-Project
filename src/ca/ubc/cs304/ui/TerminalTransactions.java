@@ -33,7 +33,7 @@ public class TerminalTransactions {
 		int choice = INVALID_INPUT;
 		
 		while(choice != 1 && choice != 2) {
-			System.out.println("If you have a table called Branch in your database (capitialization of the name does not matter), it will be dropped and a new Branch table will be created.\nIf you want to proceed, enter 1; if you want to quit, enter 2.");
+			System.out.println("You have 4 tables in your database: Players, Coaches, Teams and Matches.\nIf you want to perform operations on the tables, enter 1; if you want to quit, enter 2.");
 			
 			choice = readInteger(false);
 			
@@ -60,24 +60,49 @@ public class TerminalTransactions {
 		this.delegate = delegate;
 		
 	    bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-		int choice = INVALID_INPUT;
+		int choice1 = INVALID_INPUT;
 		
-		while (choice != 5) {
+		while (choice1 != 5) {
 			System.out.println();
-			System.out.println("1. Insert branch");
-			System.out.println("2. Delete branch");
-			System.out.println("3. Update branch name");
-			System.out.println("4. Show branch");
+			System.out.println("1. Players");
+			System.out.println("2. Coaches");
+			System.out.println("3. Teams");
+			System.out.println("4. Matches");
 			System.out.println("5. Quit");
 			System.out.print("Please choose one of the above 5 options: ");
 
-			choice = readInteger(false);
+			choice1 = readInteger(false);
 
 			System.out.println(" ");
 
-			if (choice != INVALID_INPUT) {
-				switch (choice) {
-				case 1:  
+			if (choice1 != INVALID_INPUT) {
+				switch (choice1) {
+				case 1:
+					int choice2 = INVALID_INPUT;
+					System.out.println("What operation do you want to perform on the table?");
+					while (choice2 != 7){
+						System.out.println();
+						System.out.println("1. Insert player");
+						System.out.println("2. Delete player");
+						System.out.println("3. Update player");
+						System.out.println("4. Show players");
+						System.out.println("5. Show coach name of players");
+						System.out.println("6. Show average height of players in each city");
+						System.out.println("7. Quit");
+						System.out.print("Please choose one of the above 7 options: ");
+
+						choice2 = readInteger(false);
+
+						System.out.println(" ");
+
+						if (choice2 != INVALID_INPUT) {
+							switch(choice2){
+								case 1:
+
+
+							}
+						}
+					}
 					handleInsertOption(); 
 					break;
 				case 2:  
@@ -98,6 +123,10 @@ public class TerminalTransactions {
 				}
 			}
 		}		
+	}
+
+	private void handleInsertPlayerOption(){
+
 	}
 	
 	private void handleDeleteOption() {
