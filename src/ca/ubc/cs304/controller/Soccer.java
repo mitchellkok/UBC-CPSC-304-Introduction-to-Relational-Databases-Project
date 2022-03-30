@@ -3,12 +3,11 @@ package ca.ubc.cs304.controller;
 import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.delegates.LoginWindowDelegate;
 import ca.ubc.cs304.delegates.TerminalTransactionsDelegate;
-import ca.ubc.cs304.model.BranchModel;
-import ca.ubc.cs304.model.CoachesModel;
-import ca.ubc.cs304.model.PlayersModel;
-import ca.ubc.cs304.model.TeamsModel;
+import ca.ubc.cs304.model.*;
 import ca.ubc.cs304.ui.LoginWindow;
 import ca.ubc.cs304.ui.TerminalTransactions;
+
+import java.sql.Date;
 
 /**
  * This is the main controller class that will orchestrate everything.
@@ -208,7 +207,6 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 	}
 
 
-
 	// Teams
 	@Override
 	public void deleteTeam(String tname, String city) {
@@ -263,6 +261,54 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 	public void getNumMatchPlayed() {
 		dbHandler.getNumMatchPlayed();
 
+	}
+
+	// Matches
+	public void deleteMatch(String mid) {
+		dbHandler.deleteMatch(mid);
+	}
+
+	public void insertMatch(MatchesModel model) {
+		dbHandler.insertMatch(model);
+	}
+
+	public void showMatch() {
+		MatchesModel[] models = dbHandler.getMatchInfo();
+
+		for (int i = 0; i < models.length; i++) {
+			MatchesModel model = models[i];
+			// simplified output formatting; truncation may occur
+			System.out.printf("%-10.10s", model.getMid());
+			System.out.printf("%-20.20s", model.getOname());
+			System.out.printf("%-10.10s", model.getStname());
+			System.out.printf("%-20.20s", model.getCityA());
+			System.out.printf("%-20.20s", model.getTeamA());
+			System.out.printf("%-10.10s", model.getCityB());
+			System.out.printf("%-20.20s", model.getTeamB());
+			System.out.printf("%-20.20s", model.getRentalFee());
+
+			if (model.getResult() == null) {
+				System.out.printf("%-20.20s", " ");
+			} else {
+				System.out.printf("%-20.20s", model.getResult());
+			}
+
+			if (model.getDate() == null) {
+				System.out.printf("%-20.20s", " ");
+			} else {
+				System.out.printf("%-20.20s", model.getDate());
+			}
+
+			System.out.println();
+		}
+	}
+
+	public void updateMatchResult(String mid, String result) {
+		dbHandler.updateMatchResult(mid, result);
+	}
+
+	public void updateMatchDate(String mid, Date date) {
+		dbHandler.updateMatchDate(mid, date);
 	}
 
 

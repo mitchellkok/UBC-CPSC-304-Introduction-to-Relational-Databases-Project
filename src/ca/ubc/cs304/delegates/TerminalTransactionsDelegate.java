@@ -4,7 +4,10 @@ import ca.ubc.cs304.model.BranchModel;
 import ca.ubc.cs304.model.PlayersModel;
 import ca.ubc.cs304.model.City;
 import ca.ubc.cs304.model.CoachesModel;
+import ca.ubc.cs304.model.MatchesModel;
 import ca.ubc.cs304.model.TeamsModel;
+
+import java.sql.Date;
 
 /**
  * This interface uses the delegation design pattern where instead of having
@@ -48,6 +51,11 @@ public interface TerminalTransactionsDelegate {
 
 
 	// Matches
+	public void deleteMatch(String mid);
+	public void insertMatch(MatchesModel model);
+	public void showMatch();
+	public void updateMatchResult(String mid, String result);
+	public void updateMatchDate(String mid, Date date);
 	public void getNumMatchPlayed();
 
 

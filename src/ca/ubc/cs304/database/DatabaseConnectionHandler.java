@@ -598,7 +598,7 @@ public class DatabaseConnectionHandler {
 			ps.setString(6, model.getTeamA());
 			ps.setString(7, model.getCityB());
 			ps.setString(8, model.getTeamB());
-			ps.setInt(9, model.getRentalfee());
+			ps.setInt(9, model.getRentalFee());
 
 			if (model.getResult() == null) {
 				ps.setNull(2, java.sql.Types.INTEGER);
