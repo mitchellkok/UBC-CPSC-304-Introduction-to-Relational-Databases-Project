@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class MatchesModel {
     private final String mid;
-    private String result = "0-0";
     private final String oname;
     private final String stname;
     private final String cityA;
@@ -12,11 +11,11 @@ public class MatchesModel {
     private final String cityB;
     private final String teamB;
     private final int rentalfee;
+    private String result = "0-0";
     private Date date;
 
     public MatchesModel(String mid, String oname, String stname, String cityA, String teamA, String cityB, String teamB, int rentalfee, Date date, String result) {
         this.mid = mid;
-        this.result = result;
         this.oname = oname;
         this.stname = stname;
         this.cityA = cityA;
@@ -24,6 +23,7 @@ public class MatchesModel {
         this.cityB = cityB;
         this.teamB = teamB;
         this.rentalfee = rentalfee;
+        this.result = result;
         this.date = date;
     }
 
