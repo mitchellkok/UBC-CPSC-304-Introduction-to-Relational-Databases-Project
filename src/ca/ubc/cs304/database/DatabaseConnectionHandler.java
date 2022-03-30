@@ -544,7 +544,9 @@ public class DatabaseConnectionHandler {
 	// Number of matches a team has played
 	public void getNumMatchPlayed() {
 		try{
-			String query = "SELECT COUNT(teamA) + COUNT(teamB) FROM Matches GROUP BY (teamA UNION teamB)";
+			String query = "SELECT COUNT(team) " +
+					"FROM (SELECT teamA AS team FROM Matches UNION SELECT teamB AS team FROM Matches) AS Teams " +
+					"GROUP BY (team)";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
