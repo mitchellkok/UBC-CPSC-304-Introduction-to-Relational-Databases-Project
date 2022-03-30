@@ -168,9 +168,6 @@ public class DatabaseConnectionHandler {
 			ps.setString(2, model.getTname());
 			ps.setString(3, model.getCity());
 			ps.setString(4, model.getPname());
-			ps.setInt(5, model.getHeight());
-			ps.setInt(6, model.getWeight());
-			ps.setInt(7, model.getAge());
 			ps.setInt(8, model.getClicensenumber());
 
 			if (model.getHeight() == 0) {
@@ -236,7 +233,6 @@ public class DatabaseConnectionHandler {
 			String query = "UPDATE branch SET pname = ?, age = ? WHERE jerseynumber = ? and tname = ? and city = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, pname);
-			ps.setInt(2, age);
 			ps.setInt(3, jerseynumber);
 			ps.setString(4, tname);
 			ps.setString(5, city);
@@ -335,7 +331,6 @@ public class DatabaseConnectionHandler {
 			ps.setInt(1, model.getClicensenumber());
 			ps.setString(2, model.getCname());
 			ps.setString(3, model.getGender());
-			ps.setInt(4, model.getAge());
 
 			if (model.getAge() == 0) {
 				ps.setNull(4, java.sql.Types.INTEGER);
@@ -357,7 +352,6 @@ public class DatabaseConnectionHandler {
 		try {
 			String query = "UPDATE branch SET age = ? WHERE clicensenumber";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setInt(1, age);
 			ps.setInt(2, clicensenumber);
 
 			if (age == -1) {
