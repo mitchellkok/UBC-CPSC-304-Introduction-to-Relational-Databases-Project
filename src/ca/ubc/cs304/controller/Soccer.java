@@ -7,7 +7,7 @@ import ca.ubc.cs304.model.*;
 import ca.ubc.cs304.ui.LoginWindow;
 import ca.ubc.cs304.ui.TerminalTransactions;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * This is the main controller class that will orchestrate everything.

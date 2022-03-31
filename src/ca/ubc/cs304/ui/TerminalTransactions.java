@@ -3,12 +3,13 @@ package ca.ubc.cs304.ui;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import ca.ubc.cs304.delegates.TerminalTransactionsDelegate;
-import ca.ubc.cs304.model.BranchModel;
-import ca.ubc.cs304.model.CoachesModel;
-import ca.ubc.cs304.model.PlayersModel;
-import ca.ubc.cs304.model.TeamsModel;
+import ca.ubc.cs304.model.*;
 
 /**
  * The class is only responsible for handling terminal text inputs.
@@ -83,7 +84,7 @@ public class TerminalTransactions {
                     case 1:                    // Players
                         int choice1 = INVALID_INPUT;
                         System.out.println("What operation do you want to perform on the table?");
-                        while (choice1 != 9) {
+                        while (choice1 != 10) {
                             System.out.println();
                             System.out.println("1. Insert player");
                             System.out.println("2. Delete player");
@@ -143,7 +144,7 @@ public class TerminalTransactions {
                     case 2:            // Coaches
                         int choice2 = INVALID_INPUT;
                         System.out.println("What operation do you want to perform on the table?");
-                        while (choice2 != 6) {
+                        while (choice2 != 7) {
                             System.out.println();
                             System.out.println("1. Insert coach");
                             System.out.println("2. Delete coach");
@@ -174,7 +175,7 @@ public class TerminalTransactions {
                                         break;
                                     case 5:
                                         int attributeChoice = INVALID_INPUT;
-                                        while (attributeChoice != 5) {
+                                        while (attributeChoice != 6) {
                                             System.out.println();
                                             System.out.println("1. Coach license numbers");
                                             System.out.println("2. Coach names");
@@ -230,7 +231,7 @@ public class TerminalTransactions {
                     case 3:
                         int choice3 = INVALID_INPUT;
                         System.out.println("What operation do you want to perform on the table?");
-                        while (choice3 != 6) {
+                        while (choice3 != 7) {
                             System.out.println();
                             System.out.println("1. Insert team");
                             System.out.println("2. Delete team");
@@ -274,8 +275,55 @@ public class TerminalTransactions {
                             }
                         }
                     case 4:
-                        delegate.showBranch();
-                        break;
+                        int choice4 = INVALID_INPUT;
+                        System.out.println("What operation do you want to perform on the table?");
+                        while (choice4 != 8) {
+                            System.out.println();
+                            System.out.println("1. Insert match");
+                            System.out.println("2. Delete match");
+                            System.out.println("3. Update match result");
+                            System.out.println("4. update match date");
+                            System.out.println("5. Show match");
+                            System.out.println("6. Show number of match each team played");
+                            System.out.println("7. Back to main menu");
+                            System.out.println("8. Quit");
+                            System.out.print("Please choose one of the above 8 options: ");
+
+                            choice3 = readInteger(false);
+
+                            System.out.println(" ");
+
+                            if (choice4 != INVALID_INPUT) {
+                                switch (choice4) {
+                                    case 1:
+                                        handleInsertMatchOption();
+                                        break;
+                                    case 2:
+                                        handleDeleteMatchOption();
+                                        break;
+                                    case 3:
+                                        handleUpdateMatchResultOption();
+                                        break;
+                                    case 4:
+                                        handleUpdateMatchDateOption();
+                                        break;
+                                    case 5:
+                                        delegate.showMatch();
+                                        break;
+                                    case 6:
+                                        delegate.getNumMatchPlayed();
+                                        break;
+                                    case 7:
+                                        showMainMenu(delegate);
+                                    case 8:
+                                        handleQuitOption();
+                                        break;
+                                    default:
+                                        System.out.println(WARNING_TAG + " The number that you entered was not a valid option.");
+                                        break;
+                                }
+                            }
+                        }
                     case 5:
                         handleQuitOption();
                         break;
@@ -586,20 +634,120 @@ public class TerminalTransactions {
 
     //===================================================================================================================
     // Matches
+    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+    public void handleInsertMatchOption() {
+        String mid = null;
+        while (mid == null || mid.length() <= 0) {
+            System.out.print("Please enter the match ID you wish to insert: ");
+            mid = readLine().trim();
+        }
+
+        String oname = null;
+        while (oname == null || oname.length() <= 0) {
+            System.out.print("Please enter the organizer of the match you wish to insert: ");
+            oname = readLine().trim();
+        }
+
+        String stname = null;
+        while (stname == null || stname.length() <= 0) {
+            System.out.print("Please enter the stadium of the match you wish to insert: ");
+            stname = readLine().trim();
+        }
+
+        System.out.print("Please enter the rental fee of the match you wish to insert: ");
+        int rentalfee = readInteger(false);
 
 
+        java.util.Date date = null;
+        System.out.print("Please enter the date of the match you wish to insert (format: yyyy-MM-dd): ");
+        try {
+            date = formatter.parse(readLine().trim());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
+        String teamA = null;
+        while (teamA == null || teamA.length() <= 0) {
+            System.out.print("Please enter team A of the match you wish to insert: ");
+            teamA = readLine().trim();
+        }
+        String cityA = null;
+        while (cityA == null || cityA.length() <= 0) {
+            System.out.print("Please enter the city of team A you wish to insert: ");
+            cityA = readLine().trim();
+        }
 
 
+        String teamB = null;
+        while (teamB == null || teamB.length() <= 0) {
+            System.out.print("Please enter team B of the match you wish to insert: ");
+            teamB = readLine().trim();
+        }
+        String cityB = null;
+        while (cityB == null || cityB.length() <= 0) {
+            System.out.print("Please enter the city of team B you wish to insert: ");
+            cityB = readLine().trim();
+        }
 
 
+        System.out.print("Please enter the result of the match you wish to insert: ");
+        String result = readLine().trim();
 
 
+        MatchesModel model = new MatchesModel(mid, oname, stname, cityB, teamA, cityB, teamB, rentalfee, date, result);
+        delegate.insertMatch(model);
+    }
 
 
+    public void handleDeleteMatchOption(){
+        String mid = null;
+        while (mid == null || mid.length() <= 0) {
+            System.out.print("Please enter the match ID you wish to delete: ");
+            mid = readLine().trim();
+        }
+
+        delegate.deleteMatch(mid);
+    }
 
 
+    public void handleUpdateMatchResultOption(){
+        String mid = null;
+        while (mid == null || mid.length() <= 0) {
+            System.out.print("Please enter the match ID you wish to update: ");
+            mid = readLine().trim();
+        }
+
+        String result = null;
+        while (result == null || result.length() <= 0) {
+            System.out.print("Please enter the result of the match you wish to update: ");
+            result = readLine().trim();
+        }
+
+        delegate.updateMatchResult(mid, result);
+    }
+
+
+    public void handleUpdateMatchDateOption(){
+        String mid = null;
+        while (mid == null || mid.length() <= 0) {
+            System.out.print("Please enter the match ID you wish to update: ");
+            mid = readLine().trim();
+        }
+
+        java.util.Date date = null;
+        while (date == null) {
+            System.out.print("Please enter the date of the match you wish to update: ");
+            try {
+                date = formatter.parse(readLine().trim());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        delegate.updateMatchDate(mid, date);
+
+    }
 
 
 

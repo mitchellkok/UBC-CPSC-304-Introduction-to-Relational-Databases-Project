@@ -2,12 +2,11 @@ package ca.ubc.cs304.delegates;
 
 import ca.ubc.cs304.model.BranchModel;
 import ca.ubc.cs304.model.PlayersModel;
-import ca.ubc.cs304.model.City;
 import ca.ubc.cs304.model.CoachesModel;
 import ca.ubc.cs304.model.MatchesModel;
 import ca.ubc.cs304.model.TeamsModel;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * This interface uses the delegation design pattern where instead of having
