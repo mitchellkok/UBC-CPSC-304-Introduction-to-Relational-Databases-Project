@@ -282,7 +282,7 @@ public class DatabaseConnectionHandler {
 
 	public void getCoachName(int jerseynumber, String tname, String city){
 		try{
-			String query = "SELECT Cname FROM Players, Coaches WHERE jerseynumber = ? AND tname = ? and city = ? AND Players.clicensenumber = Coach.clicensenumber";
+			String query = "SELECT cname FROM Players, Coaches WHERE jerseynumber = ? AND tname = ? and city = ? AND Players.clicensenumber = Coach.clicensenumber";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(1, jerseynumber);
 			ps.setString(2, tname);
@@ -304,15 +304,37 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
-	public void getAvgHeightInCity(){
+	public void getCityHigherThanAvgHeight(){
 		try{
-			String query = "SELECT AVG(height) FROM Players GROUP BY city";
+			String query = "WITH temp(city, avgHeight) as SELECT city, avg(height) AS avgHeight FROM Players GROUP BY city SELECT city from temp WHERE avgHeight > (SELECT avg(avgHeight) from temp)";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
 
 			if (rowCount == 0) {
 				System.out.println(WARNING_TAG + " No city exists!");
+			}
+
+			connection.commit();
+
+			ps.close();
+		}
+		catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+	}
+
+	public void showTallPlayers(int height){
+		try{
+			String query = "SELECT pname FROM Players WHERE height > ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setInt(1, height);
+
+			int rowCount = ps.executeUpdate();
+
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " Players taller than " + height + " does not exist!");
 			}
 
 			connection.commit();
@@ -421,6 +443,28 @@ public class DatabaseConnectionHandler {
 		}
 
 		return result.toArray(new CoachesModel[result.size()]);
+	}
+
+	public void showCoachOneAttribute(String attribute){
+		try{
+			String query = "SELECT ? FROM Coaches";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, attribute);
+
+			int rowCount = ps.executeUpdate();
+
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + attribute + " does not exist!");
+			}
+
+			connection.commit();
+
+			ps.close();
+		}
+		catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
 	}
 
 

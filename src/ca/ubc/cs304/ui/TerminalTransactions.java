@@ -41,10 +41,10 @@ public class TerminalTransactions {
 			
 			if (choice != INVALID_INPUT) {
 				switch (choice) {
-				case 1:  
-					delegate.databaseSetup(); 
+				case 1:
+					delegate.databaseSetup();
 					break;
-				case 2:  
+				case 2:
 					handleQuitOption();
 					break;
 				default:
@@ -82,7 +82,7 @@ public class TerminalTransactions {
 				case 1:					// Players
 					int choice1 = INVALID_INPUT;
 					System.out.println("What operation do you want to perform on the table?");
-					while (choice1 != 7){
+					while (choice1 != 9){
 						System.out.println();
 						System.out.println("1. Insert player");
 						System.out.println("2. Delete player");
@@ -91,8 +91,9 @@ public class TerminalTransactions {
 						System.out.println("5. Show players");
 						System.out.println("6. Show coach name of players");
 						System.out.println("7. Show average height of players in each city");
-						System.out.println("8. Quit");
-						System.out.print("Please choose one of the above 7 options: ");
+						System.out.println("8. Show players taller than certain height");
+						System.out.println("9. Quit");
+						System.out.print("Please choose one of the above 9 options: ");
 
 						choice1 = readInteger(false);
 
@@ -122,6 +123,8 @@ public class TerminalTransactions {
 									handleShowCoachOfPlayer();
 									break;
 								case 8:
+									handleShowTallPlayers();
+								case 9:
 									handleQuitOption();
 									break;
 								default:
@@ -134,14 +137,15 @@ public class TerminalTransactions {
 				case 2:  			// Coaches
 					int choice2 = INVALID_INPUT;
 					System.out.println("What operation do you want to perform on the table?");
-					while (choice2 != 5){
+					while (choice2 != 6){
 						System.out.println();
 						System.out.println("1. Insert coach");
 						System.out.println("2. Delete coach");
 						System.out.println("3. Update coach age");
 						System.out.println("4. Show coaches");
-						System.out.println("5. Quit");
-						System.out.print("Please choose one of the above 7 options: ");
+						System.out.println("5. Show attribute of coaches");
+						System.out.println("6. Quit");
+						System.out.print("Please choose one of the above 6 options: ");
 
 						choice2 = readInteger(false);
 
@@ -162,6 +166,41 @@ public class TerminalTransactions {
 									delegate.showCoach();
 									break;
 								case 5:
+									int attributeChoice = INVALID_INPUT;
+									while (attributeChoice != 5){
+										System.out.println();
+										System.out.println("1. Coach license numbers");
+										System.out.println("2. Coach names");
+										System.out.println("3. Coach genders");
+										System.out.println("4. Coach ages");
+										System.out.println("5. Quit");
+										System.out.print("Please choose one of the above 5 options: ");
+
+										attributeChoice = readInteger(false);
+
+										System.out.println(" ");
+
+										if (attributeChoice != INVALID_INPUT) {
+											switch (attributeChoice) {
+												case 1:
+													delegate.showCoachOneAttribute("clicensenumber");
+													break;
+												case 2:
+													delegate.showCoachOneAttribute("cname");
+													break;
+												case 3:
+													delegate.showCoachOneAttribute("gender");
+													break;
+												case 4:
+													delegate.showCoachOneAttribute("age");
+													break;
+												case 5:
+													handleQuitOption();
+											}
+										}
+
+									}
+								case 6:
 									handleQuitOption();
 									break;
 								default:
@@ -342,6 +381,16 @@ public class TerminalTransactions {
 		}
 
 		delegate.getCoachName(jerseynumber, tname, city);
+	}
+
+	private void handleShowTallPlayers(){
+		int height = INVALID_INPUT;
+		while (height == INVALID_INPUT || height <= 0) {
+			System.out.print("Please enter a height: ");
+			height = readInteger(false);
+		}
+
+		delegate.showTallPlayers(height);
 	}
 
 	// Coaches
