@@ -93,8 +93,9 @@ public class TerminalTransactions {
                             System.out.println("6. Show city whose average height of players is larger than the average of all cities");
                             System.out.println("7. Show coach name of players");
                             System.out.println("8. Show players taller than certain height");
-                            System.out.println("9. Quit");
-                            System.out.print("Please choose one of the above 9 options: ");
+                            System.out.println("9. Back to main menu");
+                            System.out.println("10. Quit");
+                            System.out.print("Please choose one of the above 10 options: ");
 
                             choice1 = readInteger(false);
 
@@ -125,7 +126,11 @@ public class TerminalTransactions {
                                         break;
                                     case 8:
                                         handleShowTallPlayers();
+                                        break;
                                     case 9:
+                                        showMainMenu(delegate);
+                                        break;
+                                    case 10:
                                         handleQuitOption();
                                         break;
                                     default:
@@ -145,8 +150,9 @@ public class TerminalTransactions {
                             System.out.println("3. Update coach age");
                             System.out.println("4. Show coaches");
                             System.out.println("5. Show attribute of coaches");
-                            System.out.println("6. Quit");
-                            System.out.print("Please choose one of the above 6 options: ");
+                            System.out.println("6. Back to main menu");
+                            System.out.println("7. Quit");
+                            System.out.print("Please choose one of the above 7 options: ");
 
                             choice2 = readInteger(false);
 
@@ -174,8 +180,9 @@ public class TerminalTransactions {
                                             System.out.println("2. Coach names");
                                             System.out.println("3. Coach genders");
                                             System.out.println("4. Coach ages");
-                                            System.out.println("5. Quit");
-                                            System.out.print("Please choose one of the above 5 options: ");
+                                            System.out.println("5. Back to main menu");
+                                            System.out.println("6. Quit");
+                                            System.out.print("Please choose one of the above 6 options: ");
 
                                             attributeChoice = readInteger(false);
 
@@ -196,12 +203,22 @@ public class TerminalTransactions {
                                                         delegate.showCoachOneAttribute("age");
                                                         break;
                                                     case 5:
+                                                        showMainMenu(delegate);
+                                                        break;
+                                                    case 6:
                                                         handleQuitOption();
+                                                        break;
+                                                    default:
+                                                        System.out.println(WARNING_TAG + " The number that you entered was not a valid option.");
+                                                        break;
                                                 }
                                             }
 
                                         }
                                     case 6:
+                                        showMainMenu(delegate);
+                                        break;
+                                    case 7:
                                         handleQuitOption();
                                         break;
                                     default:
@@ -220,8 +237,9 @@ public class TerminalTransactions {
                             System.out.println("3. Update team");
                             System.out.println("4. Show team");
                             System.out.println("5. Show average winning percent");
-                            System.out.println("6. Quit");
-                            System.out.print("Please choose one of the above 6 options: ");
+                            System.out.println("6. Back to main menu");
+                            System.out.println("7. Quit");
+                            System.out.print("Please choose one of the above 7 options: ");
 
                             choice3 = readInteger(false);
 
@@ -245,6 +263,8 @@ public class TerminalTransactions {
                                         delegate.getAvgWinPercent();
                                         break;
                                     case 6:
+                                        showMainMenu(delegate);
+                                    case 7:
                                         handleQuitOption();
                                         break;
                                     default:
