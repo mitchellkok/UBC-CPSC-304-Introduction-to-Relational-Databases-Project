@@ -211,8 +211,48 @@ public class TerminalTransactions {
                             }
                         }
                     case 3:
-                        handleUpdateOption();
-                        break;
+                        int choice3 = INVALID_INPUT;
+                        System.out.println("What operation do you want to perform on the table?");
+                        while (choice3 != 6) {
+                            System.out.println();
+                            System.out.println("1. Insert team");
+                            System.out.println("2. Delete team");
+                            System.out.println("3. Update team");
+                            System.out.println("4. Show team");
+                            System.out.println("5. Show average winning percent");
+                            System.out.println("6. Quit");
+                            System.out.print("Please choose one of the above 6 options: ");
+
+                            choice3 = readInteger(false);
+
+                            System.out.println(" ");
+
+                            if (choice3 != INVALID_INPUT) {
+                                switch (choice3) {
+                                    case 1:
+                                        handleInsertTeamOption();
+                                        break;
+                                    case 2:
+                                        handleDeleteTeamOption();
+                                        break;
+                                    case 3:
+                                        handleUpdateTeamOption();
+                                        break;
+                                    case 4:
+                                        delegate.showTeam();
+                                        break;
+                                    case 5:
+                                        delegate.getAvgWinPercent();
+                                        break;
+                                    case 6:
+                                        handleQuitOption();
+                                        break;
+                                    default:
+                                        System.out.println(WARNING_TAG + " The number that you entered was not a valid option.");
+                                        break;
+                                }
+                            }
+                        }
                     case 4:
                         delegate.showBranch();
                         break;
@@ -227,6 +267,7 @@ public class TerminalTransactions {
         }
     }
 
+    //===================================================================================================================================
     // Players
     private void handleInsertPlayerOption() {
         int jerseynumber = INVALID_INPUT;
@@ -394,6 +435,8 @@ public class TerminalTransactions {
         delegate.showTallPlayers(height);
     }
 
+
+    //================================================================================================================
     // Coaches
     private void handleInsertCoachOption() {
         int clicensenumber = INVALID_INPUT;
@@ -453,6 +496,11 @@ public class TerminalTransactions {
         delegate.updateCoach(clicensenumber, age);
     }
 
+
+
+
+    //======================================================================================================================
+    // Team
     public void handleInsertTeamOption() {
         String tname = null;
         while (tname == null || tname.length() <= 0) {
@@ -514,6 +562,31 @@ public class TerminalTransactions {
 
     }
 
+
+
+    //===================================================================================================================
+    // Matches
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //=================================================================================================================
     private void handleDeleteOption() {
         int branchId = INVALID_INPUT;
         while (branchId == INVALID_INPUT) {
