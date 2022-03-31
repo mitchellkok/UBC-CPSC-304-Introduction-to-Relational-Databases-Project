@@ -204,14 +204,14 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				PlayersModel model = new PlayersModel(
-						rs.getInt("player_jerseynumber"),
-						rs.getString("player_tname"),
-						rs.getString("player_city"),
-						rs.getString("player_pname"),
-						rs.getInt("player_height"),
-						rs.getInt("player_weight"),
-						rs.getInt("player_age"),
-						rs.getInt("player_clicencenumber"));
+						rs.getInt("jerseynumber"),
+						rs.getString("tname"),
+						rs.getString("city"),
+						rs.getString("pname"),
+						rs.getInt("height"),
+						rs.getInt("weight"),
+						rs.getInt("age"),
+						rs.getInt("clicensenumber"));
 				result.add(model);
 			}
 
@@ -291,6 +291,17 @@ public class DatabaseConnectionHandler {
 				System.out.println(WARNING_TAG + " Player " + jerseynumber + " in team " + tname + " in " + city + " does not exist!");
 			}
 
+			ArrayList<String> result = new ArrayList<String>();
+			ResultSet rs = ps.executeQuery();
+			System.out.println();
+			while(rs.next()) {
+				result.add(rs.getString("cname"));
+			}
+
+			for (int i = 0; i < result.size(); i++) {
+				System.out.printf("%-10.10s", result.get(i));
+			}
+
 			connection.commit();
 
 			ps.close();
@@ -303,13 +314,25 @@ public class DatabaseConnectionHandler {
 
 	public void getCityHigherThanAvgHeight(){
 		try{
-			String query = "WITH temp(city, avgHeight) as SELECT city, avg(height) AS avgHeight FROM Players GROUP BY city SELECT city from temp WHERE avgHeight > (SELECT avg(avgHeight) from temp)";
+			String query = "WITH temp(city, avgHeight) AS (SELECT city, avg(height) AS avgHeight FROM Players GROUP BY city) SELECT city from temp WHERE avgHeight > (SELECT avg(avgHeight) from temp)";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
 
-			if (rowCount == 0) {
+			if(rowCount == 0){
 				System.out.println(WARNING_TAG + " No city exists!");
+			}
+			else{
+				ArrayList<String> result = new ArrayList<String>();
+				ResultSet rs = ps.executeQuery();
+				System.out.println();
+				while(rs.next()) {
+					result.add(rs.getString("city"));
+				}
+
+				for (int i = 0; i < result.size(); i++) {
+					System.out.printf("%-10.10s", result.get(i));
+				}
 			}
 
 			connection.commit();
@@ -332,6 +355,18 @@ public class DatabaseConnectionHandler {
 
 			if (rowCount == 0) {
 				System.out.println(WARNING_TAG + " Players taller than " + height + " does not exist!");
+			}
+			else{
+				ArrayList<String> result = new ArrayList<String>();
+				ResultSet rs = ps.executeQuery();
+				System.out.println();
+				while(rs.next()) {
+					result.add(rs.getString("pname"));
+				}
+
+				for (int i = 0; i < result.size(); i++) {
+					System.out.printf("%-10.10s", result.get(i));
+				}
 			}
 
 			connection.commit();
@@ -426,10 +461,10 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				CoachesModel model = new CoachesModel(
-						rs.getInt("coach_clicensenumber"),
-						rs.getString("coach_cname"),
-						rs.getString("coach_gender"),
-						rs.getInt("coach_age"));
+						rs.getInt("clicensenumber"),
+						rs.getString("cname"),
+						rs.getString("gender"),
+						rs.getInt("age"));
 				result.add(model);
 			}
 

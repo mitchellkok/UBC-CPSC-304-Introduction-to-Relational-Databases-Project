@@ -90,8 +90,8 @@ public class TerminalTransactions {
                             System.out.println("3. Update player name");
                             System.out.println("4. Update player age");
                             System.out.println("5. Show players");
-                            System.out.println("6. Show coach name of players");
-                            System.out.println("7. Show average height of players in each city");
+                            System.out.println("6. Show city whose average height of players is larger than the average of all cities");
+                            System.out.println("7. Show coach name of players");
                             System.out.println("8. Show players taller than certain height");
                             System.out.println("9. Quit");
                             System.out.print("Please choose one of the above 9 options: ");
@@ -118,7 +118,7 @@ public class TerminalTransactions {
                                         delegate.showPlayer();
                                         break;
                                     case 6:
-                                        delegate.getAvgWinPercent();
+                                        delegate.getCityHigherThanAvgHeight();
                                         break;
                                     case 7:
                                         handleShowCoachOfPlayer();
