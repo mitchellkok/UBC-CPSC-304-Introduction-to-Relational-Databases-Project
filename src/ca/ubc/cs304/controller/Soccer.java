@@ -137,19 +137,16 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 			System.out.printf("%-20.20s", model.getTname());
 			System.out.printf("%-20.20s", model.getCity());
 			System.out.printf("%-20.20s", model.getPname());
-			System.out.printf("%-20.20s", model.getHeight());
 			if (model.getHeight() == 0) {
 				System.out.printf("%-20.20s", " ");
 			} else {
 				System.out.printf("%-20.20s", model.getHeight());
 			}
-			System.out.printf("%-20.20s", model.getWeight());
 			if (model.getHeight() == 0) {
 				System.out.printf("%-20.20s", " ");
 			} else {
 				System.out.printf("%-20.20s", model.getWeight());
 			}
-			System.out.printf("%-20.20s", model.getAge());
 			if (model.getHeight() == -1) {
 				System.out.printf("%-20.20s", " ");
 			} else {
@@ -197,13 +194,11 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 			// simplified output formatting; truncation may occur
 			System.out.printf("%-10.10s", model.getClicensenumber());
 			System.out.printf("%-20.20s", model.getCname());
-			System.out.printf("%-20.20s", model.getGender());
 			if (model.getGender() == " ") {
 				System.out.printf("%-20.20s", " ");
 			} else {
 				System.out.printf("%-20.20s", model.getGender());
 			}
-			System.out.printf("%-20.20s", model.getAge());
 			if (model.getAge() == -1) {
 				System.out.printf("%-20.20s", " ");
 			} else {

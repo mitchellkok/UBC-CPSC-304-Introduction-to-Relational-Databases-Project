@@ -136,7 +136,7 @@ public class DatabaseConnectionHandler {
 	// Player
 	public void deletePlayer(int jerseynumber, String tname, String city) {
 		try {
-			String query = "DELETE FROM branch WHERE jerseynumber = ? and tname = ? and city = ?";
+			String query = "DELETE FROM Players WHERE jerseynumber = ? and tname = ? and city = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(1, jerseynumber);
 			ps.setString(2, tname);
@@ -204,14 +204,14 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				PlayersModel model = new PlayersModel(
-						rs.getInt("player_jerseynumber"),
-						rs.getString("player_tname"),
-						rs.getString("player_city"),
-						rs.getString("player_pname"),
-						rs.getInt("player_height"),
-						rs.getInt("player_weight"),
-						rs.getInt("player_age"),
-						rs.getInt("player_clicencenumber"));
+						rs.getInt("jerseynumber"),
+						rs.getString("tname"),
+						rs.getString("city"),
+						rs.getString("pname"),
+						rs.getInt("height"),
+						rs.getInt("weight"),
+						rs.getInt("age"),
+						rs.getInt("clicensenumber"));
 				result.add(model);
 			}
 
@@ -226,7 +226,7 @@ public class DatabaseConnectionHandler {
 
 	public void updatePlayerName(int jerseynumber, String tname, String city, String pname) {
 		try {
-			String query = "UPDATE branch SET pname = ? WHERE jerseynumber = ? and tname = ? and city = ?";
+			String query = "UPDATE Players SET pname = ? WHERE jerseynumber = ? AND tname = ? AND city = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, pname);
 			ps.setInt(2, jerseynumber);
@@ -250,7 +250,7 @@ public class DatabaseConnectionHandler {
 
 	public void updatePlayerAge(int jerseynumber, String tname, String city, int age) {
 		try {
-			String query = "UPDATE branch SET age = ? WHERE jerseynumber = ? and tname = ? and city = ?";
+			String query = "UPDATE Players SET age = ? WHERE jerseynumber = ? AND tname = ? AND city = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(2, jerseynumber);
 			ps.setString(3, tname);
@@ -279,7 +279,7 @@ public class DatabaseConnectionHandler {
 
 	public void getCoachName(int jerseynumber, String tname, String city){
 		try{
-			String query = "SELECT cname FROM Players, Coaches WHERE jerseynumber = ? AND tname = ? and city = ? AND Players.clicensenumber = Coach.clicensenumber";
+			String query = "SELECT cname FROM Players, Coaches WHERE jerseynumber = ? AND tname = ? AND city = ? AND Players.clicensenumber = Coaches.clicensenumber";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(1, jerseynumber);
 			ps.setString(2, tname);
@@ -289,6 +289,19 @@ public class DatabaseConnectionHandler {
 
 			if (rowCount == 0) {
 				System.out.println(WARNING_TAG + " Player " + jerseynumber + " in team " + tname + " in " + city + " does not exist!");
+			}
+			else {
+				ArrayList<String> result = new ArrayList<String>();
+				ResultSet rs = ps.executeQuery();
+				System.out.println();
+				while (rs.next()) {
+					result.add(rs.getString("cname"));
+				}
+
+				for (int i = 0; i < result.size(); i++) {
+					System.out.printf("%-10.10s", result.get(i));
+					System.out.println();
+				}
 			}
 
 			connection.commit();
@@ -303,13 +316,26 @@ public class DatabaseConnectionHandler {
 
 	public void getCityHigherThanAvgHeight(){
 		try{
-			String query = "WITH temp(city, avgHeight) as SELECT city, avg(height) AS avgHeight FROM Players GROUP BY city SELECT city from temp WHERE avgHeight > (SELECT avg(avgHeight) from temp)";
+			String query = "WITH temp(city, avgHeight) AS (SELECT city, avg(height) AS avgHeight FROM Players GROUP BY city) SELECT city from temp WHERE avgHeight > (SELECT avg(avgHeight) from temp)";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
 
-			if (rowCount == 0) {
+			if(rowCount == 0){
 				System.out.println(WARNING_TAG + " No city exists!");
+			}
+			else{
+				ArrayList<String> result = new ArrayList<String>();
+				ResultSet rs = ps.executeQuery();
+				System.out.println();
+				while(rs.next()) {
+					result.add(rs.getString("city"));
+				}
+
+				for (int i = 0; i < result.size(); i++) {
+					System.out.printf("%-10.10s", result.get(i));
+					System.out.println();
+				}
 			}
 
 			connection.commit();
@@ -333,6 +359,19 @@ public class DatabaseConnectionHandler {
 			if (rowCount == 0) {
 				System.out.println(WARNING_TAG + " Players taller than " + height + " does not exist!");
 			}
+			else{
+				ArrayList<String> result = new ArrayList<String>();
+				ResultSet rs = ps.executeQuery();
+				System.out.println();
+				while(rs.next()) {
+					result.add(rs.getString("pname"));
+				}
+
+				for (int i = 0; i < result.size(); i++) {
+					System.out.printf("%-10.10s", result.get(i));
+					System.out.println();
+				}
+			}
 
 			connection.commit();
 
@@ -347,7 +386,7 @@ public class DatabaseConnectionHandler {
 	// Coach
 	public void deleteCoach(int clicensenumber) {
 		try {
-			String query = "DELETE FROM branch WHERE clicensenumber = ?";
+			String query = "DELETE FROM Coaches WHERE clicensenumber = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(1, clicensenumber);
 
@@ -391,7 +430,7 @@ public class DatabaseConnectionHandler {
 
 	public void updateCoach(int clicensenumber, int age){
 		try {
-			String query = "UPDATE branch SET age = ? WHERE clicensenumber";
+			String query = "UPDATE Coaches SET age = ? WHERE clicensenumber = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(2, clicensenumber);
 
@@ -426,10 +465,10 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				CoachesModel model = new CoachesModel(
-						rs.getInt("coach_clicensenumber"),
-						rs.getString("coach_cname"),
-						rs.getString("coach_gender"),
-						rs.getInt("coach_age"));
+						rs.getInt("clicensenumber"),
+						rs.getString("cname"),
+						rs.getString("gender"),
+						rs.getInt("age"));
 				result.add(model);
 			}
 
@@ -444,14 +483,42 @@ public class DatabaseConnectionHandler {
 
 	public void showCoachOneAttribute(String attribute){
 		try{
-			String query = "SELECT ? FROM Coaches";
+			String query = "";
+			if (attribute == "clicensenumber")
+				query = "SELECT clicensenumber FROM Coaches";
+			else if (attribute == "cname")
+				query = "SELECT cname FROM Coaches";
+			else if (attribute == "gender")
+				query = "SELECT gender FROM Coaches";
+			else if (attribute == "age")
+				query = "SELECT age FROM Coaches";
+
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setString(1, attribute);
 
 			int rowCount = ps.executeUpdate();
 
 			if (rowCount == 0) {
 				System.out.println(WARNING_TAG + attribute + " does not exist!");
+			}
+			else{
+				ArrayList<String> result = new ArrayList<String>();
+				ResultSet rs = ps.executeQuery();
+				System.out.println();
+				while(rs.next()) {
+					if (attribute == "clicensenumber")
+						result.add(rs.getString("clicensenumber"));
+					else if (attribute == "cname")
+						result.add(rs.getString("cname"));
+					else if (attribute == "gender")
+						result.add(rs.getString("gender"));
+					else if (attribute == "age")
+						result.add(rs.getString("age"));
+				}
+
+				for (int i = 0; i < result.size(); i++) {
+					System.out.printf("%-10.10s", result.get(i));
+					System.out.println();
+				}
 			}
 
 			connection.commit();
