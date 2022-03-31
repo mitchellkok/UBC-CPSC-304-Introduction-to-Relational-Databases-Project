@@ -282,7 +282,7 @@ public class DatabaseConnectionHandler {
 
 	public void getCoachName(int jerseynumber, String tname, String city){
 		try{
-			String query = "SELECT DISTINCT Cname FROM Players, Coaches WHERE jerseynumber = ? AND tname = ? and city = ? AND Players.clicensenumber = Coach.clicensenumber";
+			String query = "SELECT Cname FROM Players, Coaches WHERE jerseynumber = ? AND tname = ? and city = ? AND Players.clicensenumber = Coach.clicensenumber";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(1, jerseynumber);
 			ps.setString(2, tname);
