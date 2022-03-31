@@ -80,10 +80,7 @@ CREATE TABLE Players
     PRIMARY KEY (tname, city, jerseynumber),
     FOREIGN KEY (tname, city) REFERENCES Teams
         ON DELETE CASCADE
-        ON UPDATE CASCADE,
     FOREIGN KEY (clicensenumber) REFERENCES Coaches
-        ON DELETE NO ACTION
-        ON UPDATE CASCADE
 );
 
 CREATE TABLE Coaches
@@ -125,18 +122,10 @@ CREATE TABLE Matches
     date      date,
     result    char(10),
     PRIMARY KEY (mid),
-    FOREIGN KEY (oname) REFERENCES Organizers
-        ON DELETE NO ACTION
-        ON UPDATE CASCADE,
-    FOREIGN KEY (stname) REFERENCES Stadiums
-        ON DELETE NO ACTION
-        ON UPDATE CASCADE,
-    FOREIGN KEY (teamA, cityA) REFERENCES Teams (tname, city)
-        ON DELETE NO ACTION
-        ON UPDATE CASCADE,
+    FOREIGN KEY (oname) REFERENCES Organizers,
+    FOREIGN KEY (stname) REFERENCES Stadiums,
+    FOREIGN KEY (teamA, cityA) REFERENCES Teams (tname, city),
     FOREIGN KEY (teamB, cityB) REFERENCES Teams (tname, city)
-        ON DELETE NO ACTION
-        ON UPDATE CASCADE
 );
 
 CREATE TABLE Finances
@@ -160,10 +149,8 @@ CREATE TABLE Livestreams
     mid     char(10),
     FOREIGN KEY (bname, country) REFERENCES Broadcasters
         ON DELETE CASCADE
-        ON UPDATE CASCADE,
     FOREIGN KEY (mid) REFERENCES Matches
         ON DELETE CASCADE
-        ON UPDATE CASCADE
 );
 
 CREATE TABLE Officiates
@@ -210,3 +197,29 @@ INSERT INTO matches (mid, oname, stname, rentalfee, teamA, cityA, teamB, cityB, 
     VALUES("ZXC098", "Senior Football League", "BC Place", "Chelsea", "Chelsea", "Liverpool", "Liverpool", 5000, 25-MAR-07, "2-3");
 INSERT INTO matches (mid, oname, stname, rentalfee, teamA, cityA, teamB, cityB, date)
     VALUES("FGH135", "FIFA", "Tokyo Dome", "Barcelona", "FC Barcelona", "Manchester", "Manchester United", 15000, 15-SEP-27);
+
+INSERT INTO TV (bname, country, contact, channelnumber)
+    VALUES ("ABC", "USA", 93461996, 101);
+INSERT INTO TV (bname, country, contact, channelnumber)
+    VALUES ("CNN", "USA", 94866588, 202);
+INSERT INTO TV (bname, country, contact, channelnumber)
+    VALUES ("Sportsnet", "Canada", 75054932, 303);
+
+INSERT INTO Livestreams (bname, country, mid)
+    VALUES ("ABC", "USA", "ABC432");
+INSERT INTO Livestreams (bname, country, mid)
+    VALUES ("ABC", "USA", "QWE765");
+INSERT INTO Livestreams (bname, country, mid)
+    VALUES ("ABC", "USA", "ZXC098");
+INSERT INTO Livestreams (bname, country, mid)
+    VALUES ("ABC", "USA", "FGH135");
+INSERT INTO Livestreams (bname, country, mid)
+    VALUES ("CNN", "USA", "QWE765");
+INSERT INTO Livestreams (bname, country, mid)
+    VALUES ("CNN", "USA", "ZXC098");
+INSERT INTO Livestreams (bname, country, mid)
+    VALUES ("CNN", "USA", "FGH135");
+INSERT INTO Livestreams (bname, country, mid)
+    VALUES ("Sportsnet", "Canada", "ZXC098");
+INSERT INTO Livestreams (bname, country, mid)
+    VALUES ("Sportsnet", "Canada", "FGH135");

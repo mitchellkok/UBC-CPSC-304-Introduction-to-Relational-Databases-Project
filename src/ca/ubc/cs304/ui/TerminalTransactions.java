@@ -7,10 +7,10 @@ import java.io.InputStreamReader;
 import ca.ubc.cs304.delegates.TerminalTransactionsDelegate;
 import ca.ubc.cs304.model.BranchModel;
 import ca.ubc.cs304.model.PlayersModel;
-import ca.ubc.cs304.model.CoachesModel;
+import ca.ubc.cs304.model.TeamsModel;
 
 /**
- * The class is only responsible for handling terminal text inputs. 
+ * The class is only responsible for handling terminal text inputs.
  */
 public class TerminalTransactions {
 	private static final String EXCEPTION_TAG = "[EXCEPTION]";
@@ -452,112 +452,173 @@ public class TerminalTransactions {
 		delegate.updateCoach(clicensenumber, age);
 	}
 
-	private void handleDeleteOption() {
-		int branchId = INVALID_INPUT;
-		while (branchId == INVALID_INPUT) {
-			System.out.print("Please enter the branch ID you wish to delete: ");
-			branchId = readInteger(false);
-			if (branchId != INVALID_INPUT) {
-				delegate.deleteBranch(branchId);
-			}
-		}
-	}
-	
-	private void handleInsertOption() {
-		int id = INVALID_INPUT;
-		while (id == INVALID_INPUT) {
-			System.out.print("Please enter the branch ID you wish to insert: ");
-			id = readInteger(false);
-		}
-		
-		String name = null;
-		while (name == null || name.length() <= 0) {
-			System.out.print("Please enter the branch name you wish to insert: ");
-			name = readLine().trim();
-		}
-		
-		// branch address is allowed to be null so we don't need to repeatedly ask for the address
-		System.out.print("Please enter the branch address you wish to insert: ");
-		String address = readLine().trim();
-		if (address.length() == 0) {
-			address = null;
-		}
-		
-		String city = null;
-		while (city == null || city.length() <= 0) {
-			System.out.print("Please enter the branch city you wish to insert: ");
-			city = readLine().trim();
-		}
-		
-		int phoneNumber = INVALID_INPUT;
-		while (phoneNumber == INVALID_INPUT) {
-			System.out.print("Please enter the branch phone number you wish to insert: ");
-			phoneNumber = readInteger(true);
-		}
-		
-		BranchModel model = new BranchModel(address,
-											city,
-											id,
-											name,
-											phoneNumber);
-		delegate.insertBranch(model);
-	}
-	
-	private void handleQuitOption() {
-		System.out.println("Good Bye!");
-		
-		if (bufferedReader != null) {
-			try {
-				bufferedReader.close();
-			} catch (IOException e) {
-				System.out.println("IOException!");
-			}
-		}
-		
-		delegate.terminalTransactionsFinished();
-	}
-	
-	private void handleUpdateOption() {
-		int id = INVALID_INPUT;
-		while (id == INVALID_INPUT) {
-			System.out.print("Please enter the branch ID you wish to update: ");
-			id = readInteger(false);
-		}
-		
-		String name = null;
-		while (name == null || name.length() <= 0) {
-			System.out.print("Please enter the branch name you wish to update: ");
-			name = readLine().trim();
-		}
+public void handleInsertTeamOption() {
+    String tname = null;
+    while (tname == null || tname.length() <= 0) {
+        System.out.print("Please enter the team name you wish to insert: ");
+        tname = readLine().trim();
+    }
 
-		delegate.updateBranch(id, name);
-	}
-	
-	private int readInteger(boolean allowEmpty) {
-		String line = null;
-		int input = INVALID_INPUT;
-		try {
-			line = bufferedReader.readLine();
-			input = Integer.parseInt(line);
-		} catch (IOException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-		} catch (NumberFormatException e) {
-			if (allowEmpty && line.length() == 0) {
-				input = EMPTY_INPUT;
-			} else {
-				System.out.println(WARNING_TAG + " Your input was not an integer");
-			}
-		}
-		return input;
-	}
-	
-	private String readLine() {
-		String result = null;
-		try {
-			result = bufferedReader.readLine();
-		} catch (IOException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-		}
-		return result;
-	}
+    String city = null;
+    while (city == null || city.length() <= 0) {
+        System.out.print("Please enter the city you wish to insert: ");
+        city = readLine().trim();
+    }
+
+    System.out.print("Please enter the winning percent you wish to insert: ");
+    int winpercent = readInteger(false);
+
+
+    TeamsModel model = new TeamsModel(tname, city, winpercent);
+    delegate.insertTeam(model);
+}
+
+public void handleDeleteTeamOption() {
+    String tname = null;
+    while (tname == null || tname.length() <= 0) {
+        System.out.print("Please enter the team name of the team you wish to delete: ");
+        tname = readLine().trim();
+    }
+
+    String city = null;
+    while (city == null || city.length() <= 0) {
+        System.out.print("Please enter the city of the team you wish to delete: ");
+        city = readLine().trim();
+    }
+
+    delegate.deleteTeam(tname, city);
+
+}
+
+public void handleUpdateTeamOption() {
+    String tname = null;
+    while (tname == null || tname.length() <= 0) {
+        System.out.print("Please enter the team name you wish to insert: ");
+        tname = readLine().trim();
+    }
+
+    String city = null;
+    while (city == null || city.length() <= 0) {
+        System.out.print("Please enter the city you wish to insert: ");
+        city = readLine().trim();
+    }
+
+    int winpercent = INVALID_INPUT;
+    while (winpercent == INVALID_INPUT) {
+        System.out.print("Please enter the winning percent you wish to update(enter -1 if you wish to leave it empty): ");
+        winpercent = readInteger(false);
+    }
+
+    delegate.updateTeam(tname, city, winpercent);
+
+}
+
+private void handleDeleteOption() {
+    int branchId = INVALID_INPUT;
+    while (branchId == INVALID_INPUT) {
+        System.out.print("Please enter the branch ID you wish to delete: ");
+        branchId = readInteger(false);
+        if (branchId != INVALID_INPUT) {
+            delegate.deleteBranch(branchId);
+        }
+    }
+}
+
+private void handleInsertOption() {
+    int id = INVALID_INPUT;
+    while (id == INVALID_INPUT) {
+        System.out.print("Please enter the branch ID you wish to insert: ");
+        id = readInteger(false);
+    }
+
+    String name = null;
+    while (name == null || name.length() <= 0) {
+        System.out.print("Please enter the branch name you wish to insert: ");
+        name = readLine().trim();
+    }
+
+    // branch address is allowed to be null so we don't need to repeatedly ask for the address
+    System.out.print("Please enter the branch address you wish to insert: ");
+    String address = readLine().trim();
+    if (address.length() == 0) {
+        address = null;
+    }
+
+    String city = null;
+    while (city == null || city.length() <= 0) {
+        System.out.print("Please enter the branch city you wish to insert: ");
+        city = readLine().trim();
+    }
+
+    int phoneNumber = INVALID_INPUT;
+    while (phoneNumber == INVALID_INPUT) {
+        System.out.print("Please enter the branch phone number you wish to insert: ");
+        phoneNumber = readInteger(true);
+    }
+
+    BranchModel model = new BranchModel(address,
+            city,
+            id,
+            name,
+            phoneNumber);
+    delegate.insertBranch(model);
+}
+
+private void handleQuitOption() {
+    System.out.println("Good Bye!");
+
+    if (bufferedReader != null) {
+        try {
+            bufferedReader.close();
+        } catch (IOException e) {
+            System.out.println("IOException!");
+        }
+    }
+
+    delegate.terminalTransactionsFinished();
+}
+
+private void handleUpdateOption() {
+    int id = INVALID_INPUT;
+    while (id == INVALID_INPUT) {
+        System.out.print("Please enter the branch ID you wish to update: ");
+        id = readInteger(false);
+    }
+
+    String name = null;
+    while (name == null || name.length() <= 0) {
+        System.out.print("Please enter the branch name you wish to update: ");
+        name = readLine().trim();
+    }
+
+    delegate.updateBranch(id, name);
+}
+
+private int readInteger(boolean allowEmpty) {
+    String line = null;
+    int input = INVALID_INPUT;
+    try {
+        line = bufferedReader.readLine();
+        input = Integer.parseInt(line);
+    } catch (IOException e) {
+        System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+    } catch (NumberFormatException e) {
+        if (allowEmpty && line.length() == 0) {
+            input = EMPTY_INPUT;
+        } else {
+            System.out.println(WARNING_TAG + " Your input was not an integer");
+        }
+    }
+    return input;
+}
+
+private String readLine() {
+    String result = null;
+    try {
+        result = bufferedReader.readLine();
+    } catch (IOException e) {
+        System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+    }
+    return result;
+}
 }

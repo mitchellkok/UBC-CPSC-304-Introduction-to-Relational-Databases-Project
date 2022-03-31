@@ -3,13 +3,7 @@ package ca.ubc.cs304.database;
 import java.sql.*;
 import java.util.ArrayList;
 
-import ca.ubc.cs304.model.BranchModel;
-import ca.ubc.cs304.model.City;
-import ca.ubc.cs304.model.PlayersModel;
-import ca.ubc.cs304.model.TeamsModel;
-import ca.ubc.cs304.model.CoachesModel;
-import ca.ubc.cs304.model.MatchesModel;
-import ca.ubc.cs304.model.TVModel;
+import ca.ubc.cs304.model.*;
 import ca.ubc.cs304.util.PrintablePreparedStatement;
 
 /**
@@ -227,42 +221,19 @@ public class DatabaseConnectionHandler {
 		return result.toArray(new PlayersModel[result.size()]);
 	}
 
-	public void updatePlayerName(int jerseynumber, String tname, String city, String pname) {
+	public void updatePlayer(int jerseynumber, String tname, String city, String pname, int age) {
 		try {
-			String query = "UPDATE branch SET pname = ? WHERE jerseynumber = ? and tname = ? and city = ?";
+			String query = "UPDATE branch SET pname = ?, age = ? WHERE jerseynumber = ? and tname = ? and city = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, pname);
-			ps.setInt(2, jerseynumber);
-			ps.setString(3, tname);
-			ps.setString(4, city);
-
-			int rowCount = ps.executeUpdate();
-
-			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " Player " + jerseynumber + " in team " + tname + " in " + city + " does not exist!");
-			}
-
-			connection.commit();
-
-			ps.close();
-		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-			rollbackConnection();
-		}
-	}
-
-	public void updatePlayerAge(int jerseynumber, String tname, String city, int age) {
-		try {
-			String query = "UPDATE branch SET age = ? WHERE jerseynumber = ? and tname = ? and city = ?";
-			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setInt(2, jerseynumber);
-			ps.setString(3, tname);
-			ps.setString(4, city);
+			ps.setInt(3, jerseynumber);
+			ps.setString(4, tname);
+			ps.setString(5, city);
 
 			if (age == -1) {
-				ps.setNull(1, java.sql.Types.INTEGER);
+				ps.setNull(2, java.sql.Types.INTEGER);
 			} else {
-				ps.setInt(1, age);
+				ps.setInt(2, age);
 			}
 
 			int rowCount = ps.executeUpdate();
@@ -536,12 +507,7 @@ public class DatabaseConnectionHandler {
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, tname);
 			ps.setString(2, city);
-
-			if (winpercent == -1) {
-				ps.setNull(3, java.sql.Types.INTEGER);
-			} else {
-				ps.setInt(3, winpercent);
-			}
+			ps.setInt(3, winpercent);
 
 
 			int rowCount = ps.executeUpdate();
@@ -781,6 +747,45 @@ public class DatabaseConnectionHandler {
 		return result.toArray(new MatchesModel[result.size()]);
 	}
 
+	// TV
+	public void insertTV(TVModel model){
+		try {
+			String query = "INSERT INTO TV VALUES (?,?,?,?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, model.getBname());
+			ps.setString(2, model.getCountry());
+			ps.setInt(3, model.getContact());
+			ps.setInt(4, model.getChannelnumber());
+
+			ps.executeUpdate();
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+	}
+
+	// Livestream
+	public void insertLivestream(LivestreamsModel model){
+		try {
+			String query = "INSERT INTO Livestreams VALUES (?,?,?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, model.getBname());
+			ps.setString(2, model.getCountry());
+			ps.setString(3, model.getMid());
+
+			ps.executeUpdate();
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+		}
+	}
+
 	// Number of matches a team has played
 	public void getAllTVWithAllMatches() {
 		try{
@@ -823,6 +828,8 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
+
+
 	private void rollbackConnection() {
 		try  {
 			connection.rollback();
@@ -843,11 +850,218 @@ public class DatabaseConnectionHandler {
 			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 		}
 
+		try {
+			String query = "CREATE TABLE TV (" +
+					"	bname char(40)," +
+					"	country char(40)," +
+					"	contact integer NOT NULL," +
+					"	channelnumber integer NOT NULL," +
+					"	PRIMARY KEY (bname, country)," +
+					"	UNIQUE (contact)" +
+					");";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "CREATE TABLE Cities (" +
+					"	city char(40)," +
+					"	country char(40) NOT NULL," +
+					"	PRIMARY KEY (city)" +
+					");";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "CREATE TABLE Teams (" +
+					"	tname char(40)," +
+					"	city char(40)," +
+					"	winpercent integer," +
+					"	PRIMARY KEY (tname, city)," +
+					"	FOREIGN KEY (city) REFERENCES Cities" +
+					");";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "CREATE TABLE Players (" +
+					"	jerseynumber integer," +
+					"	tname char(40)," +
+					"	city char(40)," +
+					"	pname char(40) NOT NULL," +
+					"	height integer," +
+					"	weight integer," +
+					"	age integer," +
+					"	clicensenumber integer NOT NULL," +
+					"	PRIMARY KEY (tname, city, jerseynumber)," +
+					"	FOREIGN KEY (tname, city) REFERENCES Teams" +
+					"		ON DELETE CASCADE," +
+					"	FOREIGN KEY (clicensenumber) REFERENCES Coaches" +
+					");";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "CREATE TABLE Coaches (" +
+					"    clicensenumber integer," +
+					"    cname char(40) NOT NULL," +
+					"    gender char(10)," +
+					"    age integer," +
+					"    PRIMARY KEY (clicensenumber)" +
+					");";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "CREATE TABLE Matches (" +
+					"    mid       char(10)," +
+					"    oname     char(40) NOT NULL," +
+					"    stname    char(40) NOT NULL," +
+					"    rentalfee integer," +
+					"    teamA     char(40) NOT NULL," +
+					"    cityA     char(40) NOT NULL," +
+					"    teamB     char(40) NOT NULL," +
+					"    cityB     char(40) NOT NULL," +
+					"    date      date," +
+					"    result    char(10)," +
+					"    PRIMARY KEY (mid)," +
+					"    FOREIGN KEY (oname) REFERENCES Organizers," +
+					"    FOREIGN KEY (stname) REFERENCES Stadiums," +
+					"    FOREIGN KEY (teamA, cityA) REFERENCES Teams (tname, city)," +
+					"    FOREIGN KEY (teamB, cityB) REFERENCES Teams (tname, city)" +
+					");";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "CREATE TABLE Livestreams (" +
+					"    bname   char(40)," +
+					"    country char(40)," +
+					"    mid     char(10)," +
+					"    FOREIGN KEY (bname, country) REFERENCES Broadcasters" +
+					"        ON DELETE CASCADE," +
+					"    FOREIGN KEY (mid) REFERENCES Matches" +
+					"        ON DELETE CASCADE" +
+					");";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
 		BranchModel branch1 = new BranchModel("123 Charming Ave", "Vancouver", 1, "First Branch", 1234567);
 		insertBranch(branch1);
 
 		BranchModel branch2 = new BranchModel("123 Coco Ave", "Vancouver", 2, "Second Branch", 1234568);
 		insertBranch(branch2);
+
+		// Insert Players
+		PlayersModel player1 = new PlayersModel(1, "Liverpool", "Liverpool", "John Blonde", 175, 75, 33, 12345);
+		insertPlayer(player1);
+
+		PlayersModel player2 = new PlayersModel(2, "Liverpool", "Liverpool", "Jack Black", 185, 85, 34, 12345);
+		insertPlayer(player2);
+
+		PlayersModel player3 = new PlayersModel(3, "Liverpool", "Liverpool", "Jay Gray", 165, 65, 35, 12345);
+		insertPlayer(player3);
+
+		PlayersModel player4 = new PlayersModel(11, "Manchester United", "Manchester", "Billy Klub", 167, 67, 36, 67890);
+		insertPlayer(player4);
+
+		PlayersModel player5 = new PlayersModel(22, "Manchester United", "Manchester", "Bobby Pynn", 177, 77, 37, 67890);
+		insertPlayer(player5);
+
+		PlayersModel player6 = new PlayersModel(33, "Manchester United", "Manchester", "Barry Caid", 187, 87, 38, 67890);
+		insertPlayer(player6);
+
+		// Insert Teams
+		TeamsModel team1 = new TeamsModel("Liverpool", "Liverpool", 77);
+		insertTeam(team1);
+
+		TeamsModel team2 = new TeamsModel("Manchester United", "Manchester", 66);
+		insertTeam(team2);
+
+		// Insert Coaches
+		CoachesModel coach1 = new CoachesModel(12345, "Jim Slim", "Male", 55);
+		insertCoach(coach1);
+
+		CoachesModel coach2 = new CoachesModel(67890, "Ben Ten", "Male", 44);
+		insertCoach(coach2);
+
+		// Insert Matches
+		MatchesModel match1 = new MatchesModel("ASD432", "FIFA", "Thunderbird Stadium", "Manchester", "Manchester United", "Liverpool", "Liverpool", 10000, 01-JAN-17, "5-6");
+		insertMatch(match1);
+
+		MatchesModel match2 = new MatchesModel("QWE765", "Junior Football League", "Tokyo Dome", "Madrid", "Real Madrid", "Barcelona", "FC Barcelona", 25000, 05-DEC-97, "6-7");
+		insertMatch(match2);
+
+		MatchesModel match3 = new MatchesModel("ZXC098", "Senior Football League", "BC Place", "Chelsea", "Chelsea", "Liverpool", "Liverpool", 5000, 25-MAR-07, "2-3");
+		insertMatch(match3);
+
+		MatchesModel match4 = new MatchesModel("FGH135", "FIFA", "Tokyo Dome", "Barcelona", "FC Barcelona", "Manchester", "Manchester United", 15000, 15-SEP-27);
+		insertMatch(match4);
+
+		// Insert TV
+		TVModel tv1 = new TVModel("ABC", "USA", 93461996, 101);
+		insertTV(tv1);
+
+		TVModel tv2 = new TVModel("CNN", "USA", 94866588, 202);
+		insertTV(tv2);
+
+		TVModel tv3 = new TVModel("Sportsnet", "Canada", 75054932, 303);
+		insertTV(tv3);
+
+		// Insert Livestream
+		LivestreamsModel livestream1 = new LivestreamsModel("ABC", "USA", "ABC432");
+		insertLivestream(livestream1);
+
+		LivestreamsModel livestream2 = new LivestreamsModel("ABC", "USA", "QWE765");
+		insertLivestream(livestream2);
+
+		LivestreamsModel livestream3 = new LivestreamsModel("ABC", "USA", "ZXC098");
+		insertLivestream(livestream3);
+
+		LivestreamsModel livestream4 = new LivestreamsModel("ABC", "USA", "FGH135");
+		insertLivestream(livestream4);
+
+		LivestreamsModel livestream5 = new LivestreamsModel("CNN", "USA", "QWE765");
+		insertLivestream(livestream5);
+
+		LivestreamsModel livestream6 = new LivestreamsModel("CNN", "USA", "ZXC098");
+		insertLivestream(livestream6);
+
+		LivestreamsModel livestream7 = new LivestreamsModel("CNN", "USA", "FGH135");
+		insertLivestream(livestream7);
+
+		LivestreamsModel livestream8 = new LivestreamsModel("Sportsnet", "Canada", "ZXC098");
+		insertLivestream(livestream8);
+
+		LivestreamsModel livestream9 = new LivestreamsModel("Sportsnet", "Canada", "FGH135");
+		insertLivestream(livestream9);
 	}
 
 	private void dropBranchTableIfExists() {
