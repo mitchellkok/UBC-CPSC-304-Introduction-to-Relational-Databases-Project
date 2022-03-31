@@ -4,7 +4,7 @@ CREATE TABLE Sponsors
     contact integer NOT NULL,
     PRIMARY KEY (spname),
     UNIQUE (contact)
-);
+)
 
 CREATE TABLE Radio
 (
@@ -14,7 +14,7 @@ CREATE TABLE Radio
     frequency integer NOT NULL,
     PRIMARY KEY (bname, country),
     UNIQUE (contact)
-);
+)
 
 CREATE TABLE TV
 (
@@ -24,7 +24,7 @@ CREATE TABLE TV
     channelnumber integer NOT NULL,
     PRIMARY KEY (bname, country),
     UNIQUE (contact)
-);
+)
 
 CREATE TABLE OnlineStreaming
 (
@@ -33,14 +33,14 @@ CREATE TABLE OnlineStreaming
     contact          NOT NULL,
     url     char(40) NOT NULL,
     PRIMARY KEY (bname, country)
-);
+)
 
 CREATE TABLE Organizers
 (
     oname char(40)
         PRIMARY KEY (oname),
     UNIQUE (contact, url)
-);
+)
 
 CREATE TABLE Referees
 (
@@ -49,7 +49,8 @@ CREATE TABLE Referees
     gender         char(10),
     age            integer,
     PRIMARY KEY (rlicensenumber)
-);
+)
+
 
 CREATE TABLE Teams
 (
@@ -58,14 +59,15 @@ CREATE TABLE Teams
     winpercent integer,
     PRIMARY KEY (tname, city),
     FOREIGN KEY (city) REFERENCES Cities
-);
+)
 
 CREATE TABLE Cities
 (
     city    char(40),
     country char(40) NOT NULL,
     PRIMARY KEY (city)
-);
+)
+
 
 CREATE TABLE Players
 (
@@ -84,7 +86,7 @@ CREATE TABLE Players
     FOREIGN KEY (clicensenumber) REFERENCES Coaches
         ON DELETE NO ACTION
         ON UPDATE CASCADE
-);
+)
 
 CREATE TABLE Coaches
 (
@@ -93,7 +95,7 @@ CREATE TABLE Coaches
     gender         char(10),
     age            integer,
     PRIMARY KEY (clicensenumber)
-);
+)
 
 CREATE TABLE Stadiums
 (
@@ -103,18 +105,20 @@ CREATE TABLE Stadiums
     PRIMARY KEY (stname),
     FOREIGN KEY (address) REFERENCES Locations,
     UNIQUE (address)
-);
+)
 
 CREATE TABLE Locations
 (
     address    char(40) NOT NULL,
     postalcode char(6)  NOT NULL,
     PRIMARY KEY (address)
-);
+)
 
 CREATE TABLE Matches
 (
     mid       char(10),
+    result    char(10),
+    date      date,
     oname     char(40) NOT NULL,
     stname    char(40) NOT NULL,
     rentalfee integer,
@@ -122,8 +126,6 @@ CREATE TABLE Matches
     cityA     char(40) NOT NULL,
     teamB     char(40) NOT NULL,
     cityB     char(40) NOT NULL,
-    date      date,
-    result    char(10),
     PRIMARY KEY (mid),
     FOREIGN KEY (oname) REFERENCES Organizers
         ON DELETE NO ACTION
@@ -137,7 +139,7 @@ CREATE TABLE Matches
     FOREIGN KEY (teamB, cityB) REFERENCES Teams (tname, city)
         ON DELETE NO ACTION
         ON UPDATE CASCADE
-);
+)
 
 CREATE TABLE Finances
 (
@@ -150,7 +152,7 @@ CREATE TABLE Finances
     FOREIGN KEY (mid) REFERENCES Matches
         ON DELETE CASCADE
         ON UPDATE CASCADE
-);
+)
 
 
 CREATE TABLE Livestreams
@@ -164,7 +166,7 @@ CREATE TABLE Livestreams
     FOREIGN KEY (mid) REFERENCES Matches
         ON DELETE CASCADE
         ON UPDATE CASCADE
-);
+)
 
 CREATE TABLE Officiates
 (
@@ -177,36 +179,8 @@ CREATE TABLE Officiates
     FOREIGN KEY (mid) REFERENCES Matches
         ON DELETE CASCADE
         ON UPDATE CASCADE
-);
+)
 
-INSERT INTO players (jerseynumber, tname, city, pname, height, weight, age, clicensenumber)
-    VALUES (1, "Liverpool", "Liverpool", "John Blonde", 175, 75, 33, 12345);
-INSERT INTO players (jerseynumber, tname, city, pname, height, weight, age, clicensenumber)
-    VALUES (2, "Liverpool", "Liverpool", "Jack Black", 185, 85, 34, 12345);
-INSERT INTO players (jerseynumber, tname, city, pname, height, weight, age, clicensenumber)
-    VALUES (3, "Liverpool", "Liverpool", "Jay Gray", 165, 65, 35, 12345);
-INSERT INTO players (jerseynumber, tname, city, pname, height, weight, age, clicensenumber)
-    VALUES (11, "Manchester United", "Manchester", "Billy Klub", 167, 67, 36, 67890);
-INSERT INTO players (jerseynumber, tname, city, pname, height, weight, age, clicensenumber)
-    VALUES (22, "Manchester United", "Manchester", "Bobby Pynn", 177, 77, 37, 67890);
-INSERT INTO players (jerseynumber, tname, city, pname, height, weight, age, clicensenumber)
-    VALUES (33, "Manchester United", "Manchester", "Barry Caid", 187, 87, 38, 67890);
-
-INSERT INTO teams (tname, city, winpercent)
-    VALUES ("Liverpool", "Liverpool", 77);
-INSERT INTO teams (tname, city, winpercent)
-    VALUES ("Manchester United", "Manchester", 66);
-
-INSERT INTO coaches (clicensenumber, cname, gender, age)
-    VALUES (12345, "Jim Slim", "Male", 55);
-INSERT INTO coaches (clicensenumber, cname, gender, age)
-    VALUES (67890, "Ben Ten", "Male", 44);
-
-INSERT INTO matches (mid, oname, stname, rentalfee, teamA, cityA, teamB, cityB, date, result)
-    VALUES("ASD432", "FIFA", "Thunderbird Stadium", "Manchester", "Manchester United", "Liverpool", "Liverpool", 10000, 01-JAN-17, "5-6");
-INSERT INTO matches (mid, oname, stname, rentalfee, teamA, cityA, teamB, cityB, date, result)
-    VALUES("QWE765", "Junior Football League", "Tokyo Dome", "Madrid", "Real Madrid", "Barcelona", "FC Barcelona", 25000, 05-DEC-97, "6-7");
-INSERT INTO matches (mid, oname, stname, rentalfee, teamA, cityA, teamB, cityB, date, result)
-    VALUES("ZXC098", "Senior Football League", "BC Place", "Chelsea", "Chelsea", "Liverpool", "Liverpool", 5000, 25-MAR-07, "2-3");
-INSERT INTO matches (mid, oname, stname, rentalfee, teamA, cityA, teamB, cityB, date)
-    VALUES("FGH135", "FIFA", "Tokyo Dome", "Barcelona", "FC Barcelona", "Manchester", "Manchester United", 15000, 15-SEP-27);
+--
+-- INSERT INTO branch VALUES (1, "ABC", "123 Charming Ave", "Vancouver", "6041234567");
+-- INSERT INTO branch VALUES (2, "DEF", "123 Coco Ave", "Vancouver", "6044567890");
