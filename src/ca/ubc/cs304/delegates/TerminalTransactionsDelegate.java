@@ -32,13 +32,15 @@ public interface TerminalTransactionsDelegate {
 	public void showPlayer();
 	public void updatePlayer(int jerseynumber, String tname, String city, String pname, int age);
 	public void getCoachName(int jerseynumber, String tname, String city);
-	public void getAvgHeightInCity();
+	public void getCityHigherThanAvgHeight();
+	public void showTallPlayers(int height);
 
 	// Coaches
 	public void deleteCoach(int clicensenumber);
 	public void insertCoach(CoachesModel model);
 	public void showCoach();
 	public void updateCoach(int clicensenumber, int age);
+	public void showCoachOneAttribute(String attribute);
 
 
 	// Teams

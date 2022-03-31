@@ -163,8 +163,12 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 		dbHandler.getCoachName(jerseynumber, tname, city);
 	}
 
-	public void getAvgHeightInCity(){
-		dbHandler.getAvgHeightInCity();
+	public void getCityHigherThanAvgHeight(){
+		dbHandler.getCityHigherThanAvgHeight();
+	}
+
+	public void showTallPlayers(int height){
+		dbHandler.showTallPlayers(height);
 	}
 
 	// Coach
@@ -204,6 +208,10 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 
 			System.out.println();
 		}
+	}
+
+	public void showCoachOneAttribute(String attribute){
+		dbHandler.showCoachOneAttribute(attribute);
 	}
 
 
