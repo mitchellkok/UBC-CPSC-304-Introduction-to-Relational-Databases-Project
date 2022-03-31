@@ -118,7 +118,7 @@ CREATE TABLE Matches
     cityB     char(40) NOT NULL,
     teamB     char(40) NOT NULL,
     rentalfee integer,
-    date      date,
+    matchdate date,
     result    char(10),
     PRIMARY KEY (mid),
     FOREIGN KEY (oname) REFERENCES Organizers,
