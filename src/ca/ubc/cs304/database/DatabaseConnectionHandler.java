@@ -1,7 +1,10 @@
 package ca.ubc.cs304.database;
 
 import java.sql.*;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import ca.ubc.cs304.model.*;
 import ca.ubc.cs304.util.PrintablePreparedStatement;
@@ -490,7 +493,7 @@ public class DatabaseConnectionHandler {
 
 	public void insertTeam(TeamsModel model){
 		try {
-			String query = "INSERT INTO team VALUES (?,?,?)";
+			String query = "INSERT INTO Teams VALUES (?,?,?)";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, model.getTname());
 			ps.setString(2, model.getCity());
@@ -652,28 +655,28 @@ public class DatabaseConnectionHandler {
 
 	public void insertMatch(MatchesModel model){
 		try {
-			String query = "INSERT INTO matches VALUES (?,?,?,?,?,?,?,?,?,?)";
+			String query = "INSERT INTO Matches VALUES (?,?,?,?,?,?,?,?,?,?)";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, model.getMid());
-			ps.setString(3, model.getOname());
-			ps.setString(4, model.getStname());
-			ps.setString(5, model.getCityA());
-			ps.setString(6, model.getTeamA());
-			ps.setString(7, model.getCityB());
-			ps.setString(8, model.getTeamB());
-			ps.setInt(9, model.getRentalFee());
-
-			if (model.getResult() == null) {
-				ps.setNull(2, java.sql.Types.INTEGER);
-			} else {
-				ps.setString(2, model.getResult());
-			}
+			ps.setString(2, model.getOname());
+			ps.setString(3, model.getStname());
+			ps.setString(4, model.getCityA());
+			ps.setString(5, model.getTeamA());
+			ps.setString(6, model.getCityB());
+			ps.setString(7, model.getTeamB());
+			ps.setInt(8, model.getRentalFee());
 
 			if (model.getDate() == null) {
-				ps.setNull(10, java.sql.Types.INTEGER);
+				ps.setNull(9, java.sql.Types.INTEGER);
 			} else {
 				long dateLong = model.getDate().getTime();
-				ps.setDate(10, new java.sql.Date(dateLong));
+				ps.setDate(9, new java.sql.Date(dateLong));
+			}
+
+			if (model.getResult() == null) {
+				ps.setNull(10, java.sql.Types.INTEGER);
+			} else {
+				ps.setString(10, model.getResult());
 			}
 
 			ps.executeUpdate();
@@ -721,7 +724,7 @@ public class DatabaseConnectionHandler {
 			if (date == null) {
 				ps.setNull(1, java.sql.Types.INTEGER);
 			} else {
-				ps.setDate(1, date);
+				ps.setDate(1, (java.sql.Date) date);
 			}
 
 			int rowCount = ps.executeUpdate();
@@ -863,6 +866,16 @@ public class DatabaseConnectionHandler {
 
 	public void databaseSetup() {
 		dropBranchTableIfExists();
+		dropLivestreamsTableIfExists();
+		dropMatchesTableIfExists();
+		dropPlayersTableIfExists();
+		dropTVTableIfExists();
+		dropTeamsTableIfExists();
+		dropCoachesTableIfExists();
+		dropOrganizersTableIfExists();
+		dropStadiumsTableIfExists();
+		dropLocationsTableIfExists();
+		dropCitiesTableIfExists();
 
 		try {
 			String query = "CREATE TABLE branch (branch_id integer PRIMARY KEY, branch_name varchar2(20) not null, branch_addr varchar2(50), branch_city varchar2(20) not null, branch_phone integer)";
@@ -875,13 +888,13 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE TV (" +
-					"	bname char(40)," +
-					"	country char(40)," +
-					"	contact integer NOT NULL," +
-					"	channelnumber integer NOT NULL," +
-					"	PRIMARY KEY (bname, country)," +
-					"	UNIQUE (contact)" +
-					");";
+					"bname char(40), " +
+					"country char(40), " +
+					"contact integer NOT NULL, " +
+					"channelnumber integer NOT NULL, " +
+					"PRIMARY KEY (bname, country), " +
+					"UNIQUE (contact)" +
+					")";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.executeUpdate();
 			ps.close();
@@ -891,10 +904,10 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE Cities (" +
-					"	city char(40)," +
-					"	country char(40) NOT NULL," +
-					"	PRIMARY KEY (city)" +
-					");";
+					"city char(40), " +
+					"country char(40) NOT NULL, " +
+					"PRIMARY KEY (city)" +
+					")";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.executeUpdate();
 			ps.close();
@@ -904,34 +917,13 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE Teams (" +
-					"	tname char(40)," +
-					"	city char(40)," +
-					"	winpercent integer," +
-					"	PRIMARY KEY (tname, city)," +
-					"	FOREIGN KEY (city) REFERENCES Cities" +
-					");";
-			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.executeUpdate();
-			ps.close();
-		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-		}
-
-		try {
-			String query = "CREATE TABLE Players (" +
-					"	jerseynumber integer," +
-					"	tname char(40)," +
-					"	city char(40)," +
-					"	pname char(40) NOT NULL," +
-					"	height integer," +
-					"	weight integer," +
-					"	age integer," +
-					"	clicensenumber integer NOT NULL," +
-					"	PRIMARY KEY (tname, city, jerseynumber)," +
-					"	FOREIGN KEY (tname, city) REFERENCES Teams" +
-					"		ON DELETE CASCADE," +
-					"	FOREIGN KEY (clicensenumber) REFERENCES Coaches" +
-					");";
+					"tname char(40), " +
+					"city char(40), " +
+					"winpercent integer, " +
+					"PRIMARY KEY (tname, city), " +
+					"FOREIGN KEY (city) REFERENCES Cities" +
+					" ON DELETE CASCADE" +
+					")";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.executeUpdate();
 			ps.close();
@@ -941,12 +933,76 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE Coaches (" +
-					"    clicensenumber integer," +
-					"    cname char(40) NOT NULL," +
-					"    gender char(10)," +
-					"    age integer," +
-					"    PRIMARY KEY (clicensenumber)" +
-					");";
+					"clicensenumber integer, " +
+					"cname char(40) NOT NULL, " +
+					"gender char(10), " +
+					"age integer, " +
+					"PRIMARY KEY (clicensenumber)" +
+					")";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "CREATE TABLE Players (" +
+					"jerseynumber integer, " +
+					"tname char(40), " +
+					"city char(40), " +
+					"pname char(40) NOT NULL, " +
+					"height integer, " +
+					"weight integer, " +
+					"age integer, " +
+					"clicensenumber integer NOT NULL, " +
+					"PRIMARY KEY (tname, city, jerseynumber), " +
+					"FOREIGN KEY (tname, city) REFERENCES Teams " +
+					" ON DELETE CASCADE, " +
+					"FOREIGN KEY (clicensenumber) REFERENCES Coaches" +
+					")";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "CREATE TABLE Locations (" +
+					"address char(40) NOT NULL, " +
+					"postalcode char(6) NOT NULL, " +
+					"PRIMARY KEY (address)" +
+					")";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+
+		try {
+			String query = "CREATE TABLE Stadiums (" +
+					"stname char(40), " +
+					"address char(40), " +
+					"capacity integer, " +
+					"PRIMARY KEY (stname)" +
+//					"FOREIGN KEY (address) REFERENCES Locations," +
+//					"UNIQUE (address)" +
+					")";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "CREATE TABLE Organizers(" +
+					"oname char(40), " +
+					"PRIMARY KEY (oname)" +
+					")";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.executeUpdate();
 			ps.close();
@@ -956,22 +1012,22 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE Matches (" +
-					"    mid       char(10)," +
-					"    oname     char(40) NOT NULL," +
-					"    stname    char(40) NOT NULL," +
-					"    rentalfee integer," +
-					"    teamA     char(40) NOT NULL," +
-					"    cityA     char(40) NOT NULL," +
-					"    teamB     char(40) NOT NULL," +
-					"    cityB     char(40) NOT NULL," +
-					"    date      date," +
-					"    result    char(10)," +
-					"    PRIMARY KEY (mid)," +
-					"    FOREIGN KEY (oname) REFERENCES Organizers," +
-					"    FOREIGN KEY (stname) REFERENCES Stadiums," +
-					"    FOREIGN KEY (teamA, cityA) REFERENCES Teams (tname, city)," +
-					"    FOREIGN KEY (teamB, cityB) REFERENCES Teams (tname, city)" +
-					");";
+					"mid char(10), " +
+					"oname char(40) NOT NULL, " +
+					"stname char(40) NOT NULL, " +
+					"cityA char(40) NOT NULL, " +
+					"teamA char(40) NOT NULL, " +
+					"cityB char(40) NOT NULL, " +
+					"teamB char(40) NOT NULL, " +
+					"rentalfee integer, " +
+					"matchdate date, " +
+					"result char(10), " +
+					"PRIMARY KEY (mid), " +
+					"FOREIGN KEY (oname) REFERENCES Organizers, " +
+					"FOREIGN KEY (stname) REFERENCES Stadiums, " +
+					"FOREIGN KEY (teamA, cityA) REFERENCES Teams (tname, city), " +
+					"FOREIGN KEY (teamB, cityB) REFERENCES Teams (tname, city)" +
+					")";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.executeUpdate();
 			ps.close();
@@ -981,15 +1037,126 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE Livestreams (" +
-					"    bname   char(40)," +
-					"    country char(40)," +
-					"    mid     char(10)," +
-					"    FOREIGN KEY (bname, country) REFERENCES Broadcasters" +
-					"        ON DELETE CASCADE," +
-					"    FOREIGN KEY (mid) REFERENCES Matches" +
-					"        ON DELETE CASCADE" +
-					");";
+					"bname char(40), " +
+					"country char(40), " +
+					"mid char(10), " +
+					"FOREIGN KEY (bname, country) REFERENCES TV" +
+					" ON DELETE CASCADE, " +
+					"FOREIGN KEY (mid) REFERENCES Matches" +
+					" ON DELETE CASCADE" +
+					")";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		// MISC INSERT STATEMENTS
+		try {
+			String query = "INSERT INTO Organizers VALUES (?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, "FIFA");
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "INSERT INTO Organizers VALUES (?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, "Junior Football League");
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "INSERT INTO Organizers VALUES (?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, "Senior Football League");
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "INSERT INTO Stadiums VALUES (?,?,?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, "BC Place");
+			ps.setString(2, "123 BC Place");
+			ps.setInt(3, 12345);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "INSERT INTO Stadiums VALUES (?,?,?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, "Thunderbird Stadium");
+			ps.setString(2, "456 Thunderbird Stadium");
+			ps.setInt(3, 34567);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "INSERT INTO Stadiums VALUES (?,?,?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, "Tokyo Dome");
+			ps.setString(2, "789 Tokyo Dome");
+			ps.setInt(3, 56789);
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "INSERT INTO Cities VALUES (?,?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, "Manchester");
+			ps.setString(2, "UK");
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "INSERT INTO Cities VALUES (?,?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, "Liverpool");
+			ps.setString(2, "UK");
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "INSERT INTO Cities VALUES (?,?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, "Chelsea");
+			ps.setString(2, "UK");
+			ps.executeUpdate();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		try {
+			String query = "INSERT INTO Cities VALUES (?,?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, "Madrid");
+			ps.setString(2, "Spain");
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {
@@ -1002,31 +1169,18 @@ public class DatabaseConnectionHandler {
 		BranchModel branch2 = new BranchModel("123 Coco Ave", "Vancouver", 2, "Second Branch", 1234568);
 		insertBranch(branch2);
 
-		// Insert Players
-		PlayersModel player1 = new PlayersModel(1, "Liverpool", "Liverpool", "John Blonde", 175, 75, 33, 12345);
-		insertPlayer(player1);
-
-		PlayersModel player2 = new PlayersModel(2, "Liverpool", "Liverpool", "Jack Black", 185, 85, 34, 12345);
-		insertPlayer(player2);
-
-		PlayersModel player3 = new PlayersModel(3, "Liverpool", "Liverpool", "Jay Gray", 165, 65, 35, 12345);
-		insertPlayer(player3);
-
-		PlayersModel player4 = new PlayersModel(11, "Manchester United", "Manchester", "Billy Klub", 167, 67, 36, 67890);
-		insertPlayer(player4);
-
-		PlayersModel player5 = new PlayersModel(22, "Manchester United", "Manchester", "Bobby Pynn", 177, 77, 37, 67890);
-		insertPlayer(player5);
-
-		PlayersModel player6 = new PlayersModel(33, "Manchester United", "Manchester", "Barry Caid", 187, 87, 38, 67890);
-		insertPlayer(player6);
-
 		// Insert Teams
 		TeamsModel team1 = new TeamsModel("Liverpool", "Liverpool", 77);
 		insertTeam(team1);
 
 		TeamsModel team2 = new TeamsModel("Manchester United", "Manchester", 66);
 		insertTeam(team2);
+
+		TeamsModel team3 = new TeamsModel("Real Madrid", "Madrid", 22);
+		insertTeam(team3);
+
+		TeamsModel team4 = new TeamsModel("Chelsea", "Chelsea", 11);
+		insertTeam(team4);
 
 		// Insert Coaches
 		CoachesModel coach1 = new CoachesModel(12345, "Jim Slim", "Male", 55);
@@ -1036,17 +1190,37 @@ public class DatabaseConnectionHandler {
 		insertCoach(coach2);
 
 		// Insert Matches
-		MatchesModel match1 = new MatchesModel("ASD432", "FIFA", "Thunderbird Stadium", "Manchester", "Manchester United", "Liverpool", "Liverpool", 10000, 01-JAN-17, "5-6");
-		insertMatch(match1);
+		try {
+			Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2019-01-01");
+			MatchesModel match1 = new MatchesModel("ASD432", "FIFA", "Thunderbird Stadium", "Manchester", "Manchester United", "Liverpool", "Liverpool", 10000, date, "5-6");
+			insertMatch(match1);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
-		MatchesModel match2 = new MatchesModel("QWE765", "Junior Football League", "Tokyo Dome", "Madrid", "Real Madrid", "Barcelona", "FC Barcelona", 25000, 05-DEC-97, "6-7");
-		insertMatch(match2);
+		try {
+			Date date = new SimpleDateFormat("yyyy-MM-dd").parse("1997-12-05");
+			MatchesModel match3 = new MatchesModel("ZXC098", "Senior Football League", "BC Place", "Chelsea", "Chelsea", "Liverpool", "Liverpool", 5000, date, "2-3");
+			insertMatch(match3);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
-		MatchesModel match3 = new MatchesModel("ZXC098", "Senior Football League", "BC Place", "Chelsea", "Chelsea", "Liverpool", "Liverpool", 5000, 25-MAR-07, "2-3");
-		insertMatch(match3);
+		try {
+			Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2007-03-25");
+			MatchesModel match2 = new MatchesModel("QWE765", "Junior Football League", "Tokyo Dome", "Madrid", "Real Madrid", "Liverpool", "Liverpool", 25000, date, "6-7");
+			insertMatch(match2);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
-		MatchesModel match4 = new MatchesModel("FGH135", "FIFA", "Tokyo Dome", "Barcelona", "FC Barcelona", "Manchester", "Manchester United", 15000, 15-SEP-27);
-		insertMatch(match4);
+		try {
+			Date date = new SimpleDateFormat("yyyy-MM-dd").parse("2027-09-15");
+			MatchesModel match4 = new MatchesModel("FGH135", "FIFA", "Tokyo Dome", "Madrid", "Real Madrid", "Manchester", "Manchester United", 15000, date, "");
+			insertMatch(match4);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
 		// Insert TV
 		TVModel tv1 = new TVModel("ABC", "USA", 93461996, 101);
@@ -1059,7 +1233,7 @@ public class DatabaseConnectionHandler {
 		insertTV(tv3);
 
 		// Insert Livestream
-		LivestreamsModel livestream1 = new LivestreamsModel("ABC", "USA", "ABC432");
+		LivestreamsModel livestream1 = new LivestreamsModel("ABC", "USA", "ASD432");
 		insertLivestream(livestream1);
 
 		LivestreamsModel livestream2 = new LivestreamsModel("ABC", "USA", "QWE765");
@@ -1085,6 +1259,25 @@ public class DatabaseConnectionHandler {
 
 		LivestreamsModel livestream9 = new LivestreamsModel("Sportsnet", "Canada", "FGH135");
 		insertLivestream(livestream9);
+
+		// Insert Players
+		PlayersModel player1 = new PlayersModel(1, "Liverpool", "Liverpool", "John Blonde", 175, 75, 33, 12345);
+		insertPlayer(player1);
+
+		PlayersModel player2 = new PlayersModel(2, "Liverpool", "Liverpool", "Jack Black", 185, 85, 34, 12345);
+		insertPlayer(player2);
+
+		PlayersModel player3 = new PlayersModel(3, "Liverpool", "Liverpool", "Jay Gray", 165, 65, 35, 12345);
+		insertPlayer(player3);
+
+		PlayersModel player4 = new PlayersModel(11, "Manchester United", "Manchester", "Billy Klub", 167, 67, 36, 67890);
+		insertPlayer(player4);
+
+		PlayersModel player5 = new PlayersModel(22, "Manchester United", "Manchester", "Bobby Pynn", 177, 77, 37, 67890);
+		insertPlayer(player5);
+
+		PlayersModel player6 = new PlayersModel(33, "Manchester United", "Manchester", "Barry Caid", 187, 87, 38, 67890);
+		insertPlayer(player6);
 	}
 
 	private void dropBranchTableIfExists() {
@@ -1106,4 +1299,217 @@ public class DatabaseConnectionHandler {
 			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 		}
 	}
+
+	private void dropTVTableIfExists() {
+		try {
+			String query = "select table_name from user_tables";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				if (rs.getString(1).toLowerCase().equals("tv")) {
+					System.out.println(rs.getString(1).toLowerCase());
+					ps.execute("DROP TABLE TV");
+					break;
+				}
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+	}
+
+	private void dropTeamsTableIfExists() {
+		try {
+			String query = "select table_name from user_tables";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				if(rs.getString(1).toLowerCase().equals("teams")) {
+					System.out.println(rs.getString(1).toLowerCase());
+					ps.execute("DROP TABLE Teams");
+					break;
+				}
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+	}
+
+	private void dropCitiesTableIfExists() {
+		try {
+			String query = "select table_name from user_tables";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				if(rs.getString(1).toLowerCase().equals("cities")) {
+					System.out.println(rs.getString(1).toLowerCase());
+					ps.execute("DROP TABLE Cities");
+					break;
+				}
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+	}
+
+	private void dropPlayersTableIfExists() {
+		try {
+			String query = "select table_name from user_tables";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				if (rs.getString(1).toLowerCase().equals("players")) {
+					System.out.println(rs.getString(1).toLowerCase());
+					ps.execute("DROP TABLE Players");
+					break;
+				}
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+	}
+
+	private void dropCoachesTableIfExists() {
+		try {
+			String query = "select table_name from user_tables";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				if(rs.getString(1).toLowerCase().equals("coaches")) {
+					System.out.println(rs.getString(1).toLowerCase());
+					ps.execute("DROP TABLE Coaches");
+					break;
+				}
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+	}
+
+	private void dropMatchesTableIfExists() {
+		try {
+			String query = "select table_name from user_tables";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				if (rs.getString(1).toLowerCase().equals("matches")) {
+					System.out.println(rs.getString(1).toLowerCase());
+					ps.execute("DROP TABLE Matches");
+					break;
+				}
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+	}
+
+	private void dropLivestreamsTableIfExists() {
+		try {
+			String query = "select table_name from user_tables";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				if (rs.getString(1).toLowerCase().equals("livestreams")) {
+					System.out.println(rs.getString(1).toLowerCase());
+					ps.execute("DROP TABLE Livestreams");
+					break;
+				}
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+	}
+
+	private void dropLocationsTableIfExists() {
+		try {
+			String query = "select table_name from user_tables";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				if (rs.getString(1).toLowerCase().equals("locations")) {
+					System.out.println(rs.getString(1).toLowerCase());
+					ps.execute("DROP TABLE Locations");
+					break;
+				}
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+	}
+
+
+	private void dropStadiumsTableIfExists() {
+		try {
+			String query = "select table_name from user_tables";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				if (rs.getString(1).toLowerCase().equals("stadiums")) {
+					System.out.println(rs.getString(1).toLowerCase());
+					ps.execute("DROP TABLE Stadiums");
+					break;
+				}
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+	}
+
+	private void dropOrganizersTableIfExists() {
+		try {
+			String query = "select table_name from user_tables";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				if (rs.getString(1).toLowerCase().equals("organizers")) {
+					System.out.println(rs.getString(1).toLowerCase());
+					ps.execute("DROP TABLE Organizers");
+					break;
+				}
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+	}
+
+
 }

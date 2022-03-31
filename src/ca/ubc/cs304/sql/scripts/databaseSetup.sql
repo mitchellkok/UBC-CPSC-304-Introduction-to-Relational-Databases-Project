@@ -37,9 +37,8 @@ CREATE TABLE OnlineStreaming
 
 CREATE TABLE Organizers
 (
-    oname char(40)
-        PRIMARY KEY (oname),
-    UNIQUE (contact, url)
+    oname char(40),
+    PRIMARY KEY (oname)
 );
 
 CREATE TABLE Referees
@@ -95,7 +94,7 @@ CREATE TABLE Coaches
 CREATE TABLE Stadiums
 (
     stname   char(40),
-    address  char(40) NOT NULL,
+    address  char(40),
     capacity integer,
     PRIMARY KEY (stname),
     FOREIGN KEY (address) REFERENCES Locations,
@@ -114,11 +113,11 @@ CREATE TABLE Matches
     mid       char(10),
     oname     char(40) NOT NULL,
     stname    char(40) NOT NULL,
-    rentalfee integer,
-    teamA     char(40) NOT NULL,
     cityA     char(40) NOT NULL,
-    teamB     char(40) NOT NULL,
+    teamA     char(40) NOT NULL,
     cityB     char(40) NOT NULL,
+    teamB     char(40) NOT NULL,
+    rentalfee integer,
     date      date,
     result    char(10),
     PRIMARY KEY (mid),
@@ -147,7 +146,7 @@ CREATE TABLE Livestreams
     bname   char(40),
     country char(40),
     mid     char(10),
-    FOREIGN KEY (bname, country) REFERENCES Broadcasters
+    FOREIGN KEY (bname, country) REFERENCES TV
         ON DELETE CASCADE
     FOREIGN KEY (mid) REFERENCES Matches
         ON DELETE CASCADE
