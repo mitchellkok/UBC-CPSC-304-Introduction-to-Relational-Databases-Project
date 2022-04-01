@@ -1565,7 +1565,6 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
-
 	private void dropStadiumsTableIfExists() {
 		try {
 			String query = "select table_name from user_tables";
