@@ -264,11 +264,11 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 		dbHandler.getAvgWinPercent();
 	}
 
-//	@Override
-//	public void getNumMatchPlayed() {
-//		dbHandler.getNumMatchPlayed();
-//
-//	}
+	@Override
+	public void getNumMatchPlayed() {
+		dbHandler.getNumMatchPlayed();
+
+	}
 
 	// Matches
 	public void deleteMatch(String mid) {
@@ -317,11 +317,6 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 	public void updateMatchDate(String mid, Date date) {
 		dbHandler.updateMatchDate(mid, date);
 	}
-
-//	@Override
-//	public void getNumMatchPlayed() {
-//
-//	}
 
 
 	/**

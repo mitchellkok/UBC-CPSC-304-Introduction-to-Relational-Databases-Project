@@ -913,13 +913,24 @@ public class DatabaseConnectionHandler {
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
-
 			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " No city exists!");
+				System.out.println(WARNING_TAG + " No TV station exists!");
+			}
+			else{
+				ArrayList<String> result = new ArrayList<String>();
+				ResultSet rs = ps.executeQuery();
+				System.out.println();
+				while(rs.next()) {
+					result.add(rs.getString("bname"));
+				}
+
+				for (int i = 0; i < result.size(); i++) {
+					System.out.printf("%-10.10s", result.get(i));
+					System.out.println();
+				}
 			}
 
 			connection.commit();
-
 			ps.close();
 		}
 		catch (SQLException e) {
