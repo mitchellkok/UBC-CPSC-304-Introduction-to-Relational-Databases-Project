@@ -768,7 +768,7 @@ public class DatabaseConnectionHandler {
 				ps.setDate(9, new java.sql.Date(dateLong));
 			}
 
-			if (model.getResult() == null) {
+			if (model.getResult() == "") {
 				ps.setNull(10, java.sql.Types.INTEGER);
 			} else {
 				ps.setString(10, model.getResult());
@@ -1403,7 +1403,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("tv")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE TV");
 					break;
 				}
@@ -1424,7 +1423,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if(rs.getString(1).toLowerCase().equals("teams")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Teams");
 					break;
 				}
@@ -1445,7 +1443,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if(rs.getString(1).toLowerCase().equals("cities")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Cities");
 					break;
 				}
@@ -1466,7 +1463,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("players")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Players");
 					break;
 				}
@@ -1487,7 +1483,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if(rs.getString(1).toLowerCase().equals("coaches")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Coaches");
 					break;
 				}
@@ -1508,7 +1503,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("matches")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Matches");
 					break;
 				}
@@ -1529,7 +1523,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("livestreams")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Livestreams");
 					break;
 				}
@@ -1550,7 +1543,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("locations")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Locations");
 					break;
 				}
@@ -1572,7 +1564,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("stadiums")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Stadiums");
 					break;
 				}
@@ -1593,7 +1584,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("organizers")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Organizers");
 					break;
 				}
