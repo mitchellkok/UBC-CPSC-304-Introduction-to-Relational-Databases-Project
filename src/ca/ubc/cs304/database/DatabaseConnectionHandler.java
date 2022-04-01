@@ -970,8 +970,8 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE TV (" +
-					"bname char(40), " +
-					"country char(40), " +
+					"bname varchar(40), " +
+					"country varchar(40), " +
 					"contact integer NOT NULL, " +
 					"channelnumber integer NOT NULL, " +
 					"PRIMARY KEY (bname, country), " +
@@ -987,7 +987,7 @@ public class DatabaseConnectionHandler {
 		try {
 			String query = "CREATE TABLE Cities (" +
 					"city varchar(40), " +
-					"country char(40) NOT NULL, " +
+					"country varchar(40) NOT NULL, " +
 					"PRIMARY KEY (city)" +
 					")";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
@@ -1016,8 +1016,8 @@ public class DatabaseConnectionHandler {
 		try {
 			String query = "CREATE TABLE Coaches (" +
 					"clicensenumber integer, " +
-					"cname char(40) NOT NULL, " +
-					"gender char(10), " +
+					"cname varchar(40) NOT NULL, " +
+					"gender varchar(10), " +
 					"age integer, " +
 					"PRIMARY KEY (clicensenumber)" +
 					")";
@@ -1033,7 +1033,7 @@ public class DatabaseConnectionHandler {
 					"jerseynumber integer, " +
 					"tname varchar(40), " +
 					"city varchar(40), " +
-					"pname char(40) NOT NULL, " +
+					"pname varchar(40) NOT NULL, " +
 					"height integer, " +
 					"weight integer, " +
 					"age integer, " +
@@ -1052,8 +1052,8 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE Locations (" +
-					"address char(40) NOT NULL, " +
-					"postalcode char(6) NOT NULL, " +
+					"address varchar(40) NOT NULL, " +
+					"postalcode varchar(6) NOT NULL, " +
 					"PRIMARY KEY (address)" +
 					")";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
@@ -1066,8 +1066,8 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE Stadiums (" +
-					"stname char(40), " +
-					"address char(40), " +
+					"stname varchar(40), " +
+					"address varchar(40), " +
 					"capacity integer, " +
 					"PRIMARY KEY (stname)" +
 //					"FOREIGN KEY (address) REFERENCES Locations," +
@@ -1082,7 +1082,7 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE Organizers(" +
-					"oname char(40), " +
+					"oname varchar(40), " +
 					"PRIMARY KEY (oname)" +
 					")";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
@@ -1094,16 +1094,16 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE Matches (" +
-					"mid char(10), " +
-					"oname char(40) NOT NULL, " +
-					"stname char(40) NOT NULL, " +
+					"mid varchar(10), " +
+					"oname varchar(40) NOT NULL, " +
+					"stname varchar(40) NOT NULL, " +
 					"cityA varchar(40) NOT NULL, " +
 					"teamA varchar(40) NOT NULL, " +
 					"cityB varchar(40) NOT NULL, " +
 					"teamB varchar(40) NOT NULL, " +
 					"rentalfee integer, " +
 					"matchdate date, " +
-					"result char(10), " +
+					"result varchar(10), " +
 					"PRIMARY KEY (mid), " +
 					"FOREIGN KEY (oname) REFERENCES Organizers, " +
 					"FOREIGN KEY (stname) REFERENCES Stadiums, " +
@@ -1119,9 +1119,9 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE Livestreams (" +
-					"bname char(40), " +
-					"country char(40), " +
-					"mid char(10), " +
+					"bname varchar(40), " +
+					"country varchar(40), " +
+					"mid varchar(10), " +
 					"FOREIGN KEY (bname, country) REFERENCES TV" +
 					" ON DELETE CASCADE, " +
 					"FOREIGN KEY (mid) REFERENCES Matches" +
