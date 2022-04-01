@@ -683,9 +683,8 @@ public class DatabaseConnectionHandler {
 	// Number of matches a team has played
 	public void getNumMatchPlayed() {
 		try{
-			String query = "SELECT COUNT(team) AS numMatches " +
-					"FROM ((SELECT teamA AS team FROM Matches) UNION (SELECT teamB AS team FROM Matches))" +
-					" GROUP BY (team)";
+			String query = "SELECT teamA, COUNT(teamA) AS numA FROM Matches"
+					+ "SELECT teamB, COUNT(teamB) AS numB FROM Matches";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
@@ -755,13 +754,13 @@ public class DatabaseConnectionHandler {
 			ps.setInt(8, model.getRentalFee());
 
 			if (model.getDate() == null) {
-				ps.setNull(9, java.sql.Types.INTEGER);
+				ps.setNull(9, java.sql.Types.DATE);
 			} else {
 				long dateLong = model.getDate().getTime();
 				ps.setDate(9, new java.sql.Date(dateLong));
 			}
 
-			if (model.getResult() == null) {
+			if (model.getResult() == "") {
 				ps.setNull(10, java.sql.Types.INTEGER);
 			} else {
 				ps.setString(10, model.getResult());
@@ -805,14 +804,15 @@ public class DatabaseConnectionHandler {
 
 	public void updateMatchDate(String mid, Date date){
 		try {
-			String query = "UPDATE matches SET date = ? WHERE mid = ?";
+			String query = "UPDATE Matches SET matchdate = ? WHERE mid = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(2, mid);
 
 			if (date == null) {
-				ps.setNull(1, java.sql.Types.INTEGER);
+				ps.setNull(1, java.sql.Types.DATE);
 			} else {
-				ps.setDate(1, (java.sql.Date) date);
+				long dateLong = date.getTime();
+				ps.setDate(1, new java.sql.Date(dateLong));
 			}
 
 			int rowCount = ps.executeUpdate();
@@ -907,13 +907,24 @@ public class DatabaseConnectionHandler {
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
-
 			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " No city exists!");
+				System.out.println(WARNING_TAG + " No TV station exists!");
+			}
+			else{
+				ArrayList<String> result = new ArrayList<String>();
+				ResultSet rs = ps.executeQuery();
+				System.out.println();
+				while(rs.next()) {
+					result.add(rs.getString("bname"));
+				}
+
+				for (int i = 0; i < result.size(); i++) {
+					System.out.printf("%-10.10s", result.get(i));
+					System.out.println();
+				}
 			}
 
 			connection.commit();
-
 			ps.close();
 		}
 		catch (SQLException e) {
@@ -1396,7 +1407,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("tv")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE TV");
 					break;
 				}
@@ -1417,7 +1427,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if(rs.getString(1).toLowerCase().equals("teams")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Teams");
 					break;
 				}
@@ -1438,7 +1447,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if(rs.getString(1).toLowerCase().equals("cities")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Cities");
 					break;
 				}
@@ -1459,7 +1467,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("players")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Players");
 					break;
 				}
@@ -1480,7 +1487,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if(rs.getString(1).toLowerCase().equals("coaches")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Coaches");
 					break;
 				}
@@ -1501,7 +1507,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("matches")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Matches");
 					break;
 				}
@@ -1522,7 +1527,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("livestreams")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Livestreams");
 					break;
 				}
@@ -1543,7 +1547,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("locations")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Locations");
 					break;
 				}
@@ -1565,7 +1568,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("stadiums")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Stadiums");
 					break;
 				}
@@ -1586,7 +1588,6 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if (rs.getString(1).toLowerCase().equals("organizers")) {
-					System.out.println(rs.getString(1).toLowerCase());
 					ps.execute("DROP TABLE Organizers");
 					break;
 				}

@@ -267,7 +267,11 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 	@Override
 	public void getNumMatchPlayed() {
 		dbHandler.getNumMatchPlayed();
+	}
 
+	@Override
+	public void getAllTVWithAllMatches() {
+		dbHandler.getAllTVWithAllMatches();
 	}
 
 	// Matches
