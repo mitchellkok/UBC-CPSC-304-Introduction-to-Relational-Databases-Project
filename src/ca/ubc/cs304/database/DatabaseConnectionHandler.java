@@ -914,12 +914,8 @@ public class DatabaseConnectionHandler {
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
-
 			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " No city exists!");
-			}
-			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " No city exists!");
+				System.out.println(WARNING_TAG + " No TV station exists!");
 			}
 			else{
 				ArrayList<String> result = new ArrayList<String>();
