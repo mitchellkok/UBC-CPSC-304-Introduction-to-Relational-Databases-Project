@@ -1027,7 +1027,7 @@ public class DatabaseConnectionHandler {
 					"FOREIGN KEY (tname, city) REFERENCES Teams " +
 					" ON DELETE CASCADE, " +
 					"FOREIGN KEY (clicensenumber) REFERENCES Coaches" +
-					")";
+                    " ON DELETE CASCADE)";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.executeUpdate();
 			ps.close();
