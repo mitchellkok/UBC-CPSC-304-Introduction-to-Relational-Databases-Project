@@ -277,17 +277,16 @@ public class TerminalTransactions {
                     case 4:
                         int choice4 = INVALID_INPUT;
                         System.out.println("What operation do you want to perform on the table?");
-                        while (choice4 != 8) {
+                        while (choice4 != 7) {
                             System.out.println();
                             System.out.println("1. Insert match");
                             System.out.println("2. Delete match");
                             System.out.println("3. Update match result");
                             System.out.println("4. update match date");
                             System.out.println("5. Show match");
-                            System.out.println("6. Show number of match each team played");
-                            System.out.println("7. Back to main menu");
-                            System.out.println("8. Quit");
-                            System.out.print("Please choose one of the above 8 options: ");
+                            System.out.println("6. Back to main menu");
+                            System.out.println("7. Quit");
+                            System.out.print("Please choose one of the above 7 options: ");
 
                             choice4 = readInteger(false);
 
@@ -311,12 +310,9 @@ public class TerminalTransactions {
                                         delegate.showMatch();
                                         break;
                                     case 6:
-                                        delegate.getNumMatchPlayed();
-                                        break;
-                                    case 7:
                                         showMainMenu(delegate);
                                         break;
-                                    case 8:
+                                    case 7:
                                         handleQuitOption();
                                         break;
                                     default:

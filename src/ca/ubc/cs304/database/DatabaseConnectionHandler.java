@@ -541,7 +541,7 @@ public class DatabaseConnectionHandler {
 	// TODO
 	public void deleteTeam(String tname, String city){
 		try {
-			String query = "DELETE FROM team WHERE tname = ? AND city = ?";
+			String query = "DELETE FROM Teams WHERE tname = ? AND city = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, tname);
 			ps.setString(2, city);
@@ -688,41 +688,40 @@ public class DatabaseConnectionHandler {
 
 
 	// Number of matches a team has played
-	public void getNumMatchPlayed() {
-		try{
-			String query = "SELECT teamA, COUNT(teamA) AS numA FROM Matches"
-					+ "SELECT teamB, COUNT(teamB) AS numB FROM Matches";
-			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-
-			int rowCount = ps.executeUpdate();
-
-			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " No city exists!");
-			}
-			else{
-				ArrayList<String> result = new ArrayList<String>();
-				ResultSet rs = ps.executeQuery();
-				System.out.println();
-				while(rs.next()) {
-					result.add(rs.getString("numMatches"));
-				}
-
-				for (int i = 0; i < result.size(); i++) {
-					System.out.printf("%-10.10s", result.get(i));
-					System.out.println();
-				}
-			}
-
-			connection.commit();
-
-			ps.close();
-		}
-		catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-			rollbackConnection();
-		}
-
-	}
+//	public void getNumMatchPlayed() {
+//		try{
+//			String query = "SELECT teamA, COUNT(teamA) AS numMatches FROM Matches GROUP BY teamA";
+//			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+//
+//			int rowCount = ps.executeUpdate();
+//
+//			if (rowCount == 0) {
+//				System.out.println(WARNING_TAG + " No city exists!");
+//			}
+//			else{
+//				ArrayList<String> result = new ArrayList<String>();
+//				ResultSet rs = ps.executeQuery();
+//				System.out.println();
+//				while(rs.next()) {
+//					result.add(rs.getString("numMatches"));
+//				}
+//
+//				for (int i = 0; i < result.size(); i++) {
+//					System.out.printf("%-10.10s", result.get(i));
+//					System.out.println();
+//				}
+//			}
+//
+//			connection.commit();
+//
+//			ps.close();
+//		}
+//		catch (SQLException e) {
+//			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+//			rollbackConnection();
+//		}
+//
+//	}
 
 
 	// Matches
