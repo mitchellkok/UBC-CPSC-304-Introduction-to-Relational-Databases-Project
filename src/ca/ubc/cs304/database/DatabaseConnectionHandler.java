@@ -596,7 +596,7 @@ public class DatabaseConnectionHandler {
 
 	public void updateTeam(String tname, String city, int winpercent){
 		try {
-			String query = "UPDATE team SET winpercent = ? WHERE tname = ? AND city = ?";
+			String query = "UPDATE Teams SET winpercent = ? WHERE tname = ? AND city = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, tname);
 			ps.setString(2, city);
@@ -605,7 +605,7 @@ public class DatabaseConnectionHandler {
 
 			int rowCount = ps.executeUpdate();
 			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " Team " + tname + " does not exist!");
+				System.out.println(WARNING_TAG + " Team " + tname + " in " + city + " does not exist!");
 			}
 
 			connection.commit();
@@ -623,7 +623,7 @@ public class DatabaseConnectionHandler {
 		ArrayList<TeamsModel> result = new ArrayList<TeamsModel>();
 
 		try {
-			String query = "SELECT * FROM teams";
+			String query = "SELECT * FROM Teams";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ResultSet rs = ps.executeQuery();
 
