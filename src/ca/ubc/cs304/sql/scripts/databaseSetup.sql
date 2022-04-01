@@ -133,11 +133,9 @@ CREATE TABLE Finances
     mid    varchar(10),
     amount integer,
     FOREIGN KEY (spname) REFERENCES Sponsors
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
+        ON DELETE CASCADE,
     FOREIGN KEY (mid) REFERENCES Matches
         ON DELETE CASCADE
-        ON UPDATE CASCADE
 );
 
 
@@ -159,10 +157,8 @@ CREATE TABLE Officiates
     PRIMARY KEY (rlicensenumber, mid),
     FOREIGN KEY (rlicensenumber) REFERENCES Referees
         ON DELETE CASCADE
-        ON UPDATE CASCADE,
     FOREIGN KEY (mid) REFERENCES Matches
         ON DELETE CASCADE
-        ON UPDATE CASCADE
 );
 
 INSERT INTO players (jerseynumber, tname, city, pname, height, weight, age, clicensenumber)

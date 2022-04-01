@@ -264,15 +264,11 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 		dbHandler.getAvgWinPercent();
 	}
 
-	@Override
-	public void getNumMatchPlayed() {
-		dbHandler.getNumMatchPlayed();
-	}
-
-	@Override
-	public void getAllTVWithAllMatches() {
-		dbHandler.getAllTVWithAllMatches();
-	}
+//	@Override
+//	public void getNumMatchPlayed() {
+//		dbHandler.getNumMatchPlayed();
+//
+//	}
 
 	// Matches
 	public void deleteMatch(String mid) {
