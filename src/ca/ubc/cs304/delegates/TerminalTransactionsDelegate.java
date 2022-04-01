@@ -57,7 +57,7 @@ public interface TerminalTransactionsDelegate {
 	public void showMatch();
 	public void updateMatchResult(String mid, String result);
 	public void updateMatchDate(String mid, Date date);
-//	public void getNumMatchPlayed();
+	public void getNumMatchPlayed();
 
 
 	public void terminalTransactionsFinished();
