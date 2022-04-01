@@ -282,7 +282,7 @@ public class TerminalTransactions {
                             System.out.println("1. Insert match");
                             System.out.println("2. Delete match");
                             System.out.println("3. Update match result");
-                            System.out.println("4. update match date");
+                            System.out.println("4. Update match date");
                             System.out.println("5. Show match");
                             System.out.println("6. Show number of match each team played");
                             System.out.println("7. Back to main menu");
