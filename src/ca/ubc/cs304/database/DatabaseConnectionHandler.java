@@ -541,7 +541,7 @@ public class DatabaseConnectionHandler {
 	// TODO
 	public void deleteTeam(String tname, String city){
 		try {
-			String query = "DELETE FROM team WHERE tname = ? AND city = ?";
+			String query = "DELETE FROM Teams WHERE tname = ? AND city = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, tname);
 			ps.setString(2, city);
@@ -567,17 +567,6 @@ public class DatabaseConnectionHandler {
 			ps.setString(1, model.getTname());
 			ps.setString(2, model.getCity());
 			ps.setInt(3, model.getWinpercent());
-			if (model.getTname() == null) {
-				ps.setNull(1, java.sql.Types.INTEGER);
-			} else {
-				ps.setString(1, model.getTname());
-			}
-
-			if (model.getCity() == null) {
-				ps.setNull(2, java.sql.Types.INTEGER);
-			} else {
-				ps.setString(2, model.getCity());
-			}
 
 			if (model.getWinpercent() == -1) {
 				ps.setNull(3, java.sql.Types.INTEGER);
@@ -600,10 +589,14 @@ public class DatabaseConnectionHandler {
 		try {
 			String query = "UPDATE Teams SET winpercent = ? WHERE tname = ? AND city = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setString(1, tname);
-			ps.setString(2, city);
-			ps.setInt(3, winpercent);
+			ps.setString(2, tname);
+			ps.setString(3, city);
 
+			if (winpercent == -1) {
+				ps.setNull(1, java.sql.Types.INTEGER);
+			} else {
+				ps.setInt(1, winpercent);
+			}
 
 			int rowCount = ps.executeUpdate();
 			if (rowCount == 0) {
