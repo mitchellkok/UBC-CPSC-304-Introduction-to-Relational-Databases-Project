@@ -136,7 +136,7 @@ public class DatabaseConnectionHandler {
 	// Player
 	public void deletePlayer(int jerseynumber, String tname, String city) {
 		try {
-			String query = "DELETE FROM Players WHERE jerseynumber = ? and tname = ? and city = ?";
+			String query = "DELETE FROM Players WHERE (jerseynumber = ? and tname = ? and city = ?)";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(1, jerseynumber);
 			ps.setString(2, tname);
@@ -226,7 +226,7 @@ public class DatabaseConnectionHandler {
 
 	public void updatePlayerName(int jerseynumber, String tname, String city, String pname) {
 		try {
-			String query = "UPDATE Players SET pname = ? WHERE jerseynumber = ? AND tname = ? AND city = ?";
+			String query = "UPDATE Players SET pname = ? WHERE (jerseynumber = ? AND tname = ? AND city = ?)";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, pname);
 			ps.setInt(2, jerseynumber);
@@ -250,7 +250,7 @@ public class DatabaseConnectionHandler {
 
 	public void updatePlayerAge(int jerseynumber, String tname, String city, int age) {
 		try {
-			String query = "UPDATE Players SET age = ? WHERE jerseynumber = ? AND tname = ? AND city = ?";
+			String query = "UPDATE Players SET age = ? WHERE (jerseynumber = ? AND tname = ? AND city = ?)";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(2, jerseynumber);
 			ps.setString(3, tname);
@@ -650,13 +650,26 @@ public class DatabaseConnectionHandler {
 	// Average winpercent of all teams
 	public void getAvgWinPercent() {
 		try{
-			String query = "SELECT AVG(winpercent) FROM Teams";
+			String query = "SELECT AVG(winpercent) AS avgWinpercent FROM Teams";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
 
 			if (rowCount == 0) {
 				System.out.println(WARNING_TAG + " No city exists!");
+			}
+			else{
+				ArrayList<String> result = new ArrayList<String>();
+				ResultSet rs = ps.executeQuery();
+				System.out.println();
+				while(rs.next()) {
+					result.add(rs.getString("avgWinpercent"));
+				}
+
+				for (int i = 0; i < result.size(); i++) {
+					System.out.printf("%-10.10s", result.get(i));
+					System.out.println();
+				}
 			}
 
 			connection.commit();
