@@ -690,9 +690,8 @@ public class DatabaseConnectionHandler {
 	// Number of matches a team has played
 	public void getNumMatchPlayed() {
 		try{
-			String query = "SELECT COUNT(team) AS numMatches " +
-					"FROM ((SELECT teamA AS team FROM Matches) UNION (SELECT teamB AS team FROM Matches))" +
-					" GROUP BY (team)";
+			String query = "SELECT teamA, COUNT(teamA) AS numA FROM Matches"
+					+ "SELECT teamB, COUNT(teamB) AS numB FROM Matches";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
@@ -762,7 +761,7 @@ public class DatabaseConnectionHandler {
 			ps.setInt(8, model.getRentalFee());
 
 			if (model.getDate() == null) {
-				ps.setNull(9, java.sql.Types.INTEGER);
+				ps.setNull(9, java.sql.Types.DATE);
 			} else {
 				long dateLong = model.getDate().getTime();
 				ps.setDate(9, new java.sql.Date(dateLong));
@@ -812,14 +811,15 @@ public class DatabaseConnectionHandler {
 
 	public void updateMatchDate(String mid, Date date){
 		try {
-			String query = "UPDATE matches SET date = ? WHERE mid = ?";
+			String query = "UPDATE Matches SET matchdate = ? WHERE mid = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(2, mid);
 
 			if (date == null) {
-				ps.setNull(1, java.sql.Types.INTEGER);
+				ps.setNull(1, java.sql.Types.DATE);
 			} else {
-				ps.setDate(1, (java.sql.Date) date);
+				long dateLong = date.getTime();
+				ps.setDate(1, new java.sql.Date(dateLong));
 			}
 
 			int rowCount = ps.executeUpdate();
