@@ -315,6 +315,7 @@ public class TerminalTransactions {
                                         break;
                                     case 7:
                                         showMainMenu(delegate);
+                                        break;
                                     case 8:
                                         handleQuitOption();
                                         break;
@@ -610,19 +611,19 @@ public class TerminalTransactions {
     public void handleUpdateTeamOption() {
         String tname = null;
         while (tname == null || tname.length() <= 0) {
-            System.out.print("Please enter the team name you wish to insert: ");
+            System.out.print("Please enter the team name of team you wish to update: ");
             tname = readLine().trim();
         }
 
         String city = null;
         while (city == null || city.length() <= 0) {
-            System.out.print("Please enter the city you wish to insert: ");
+            System.out.print("Please enter the city of the team you wish to update: ");
             city = readLine().trim();
         }
 
         int winpercent = INVALID_INPUT;
         while (winpercent == INVALID_INPUT) {
-            System.out.print("Please enter the winning percent you wish to update(enter -1 if you wish to leave it empty): ");
+            System.out.print("Please enter the winning percent you wish to update (enter -1 if you wish to leave it empty): ");
             winpercent = readInteger(false);
         }
 
