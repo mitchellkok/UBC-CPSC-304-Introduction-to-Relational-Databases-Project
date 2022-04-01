@@ -26,4 +26,5 @@ public class TeamsModel {
     public void setWinpercent(int winpercent) {
         this.winpercent = winpercent;
     }
+
 }

@@ -289,7 +289,7 @@ public class TerminalTransactions {
                             System.out.println("8. Quit");
                             System.out.print("Please choose one of the above 8 options: ");
 
-                            choice3 = readInteger(false);
+                            choice4 = readInteger(false);
 
                             System.out.println(" ");
 

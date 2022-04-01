@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat;
 import ca.ubc.cs304.model.*;
 import ca.ubc.cs304.util.PrintablePreparedStatement;
 
+
+
 /**
  * This class handles all database related transactions
  */
@@ -689,7 +691,7 @@ public class DatabaseConnectionHandler {
 	public void getNumMatchPlayed() {
 		try{
 			String query = "SELECT COUNT(team) " +
-					"FROM (SELECT teamA AS team FROM Matches UNION SELECT teamB AS team FROM Matches) AS Teams " +
+					"FROM ((SELECT teamA AS team FROM Matches) UNION (SELECT teamB AS team FROM Matches))" +
 					"GROUP BY (team)";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
@@ -839,7 +841,7 @@ public class DatabaseConnectionHandler {
 						rs.getString("cityB"),
 						rs.getString("teamB"),
 						rs.getInt("rentalfee"),
-						rs.getDate("date"),
+						rs.getDate("matchdate"),
 						rs.getString("result"));
 				result.add(model);
 			}
