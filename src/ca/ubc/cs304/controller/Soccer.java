@@ -285,9 +285,9 @@ public class Soccer implements LoginWindowDelegate, TerminalTransactionsDelegate
 		for (int i = 0; i < models.length; i++) {
 			MatchesModel model = models[i];
 			// simplified output formatting; truncation may occur
-			System.out.printf("%-20.20s", model.getMid());
-			System.out.printf("%-20.30s", model.getOname());
-			System.out.printf("%-20.20s", model.getStname());
+			System.out.printf("%-10.10s", model.getMid());
+			System.out.printf("%-30.30s", model.getOname());
+			System.out.printf("%-30.30s", model.getStname());
 			System.out.printf("%-20.20s", model.getCityA());
 			System.out.printf("%-20.20s", model.getTeamA());
 			System.out.printf("%-20.20s", model.getCityB());
