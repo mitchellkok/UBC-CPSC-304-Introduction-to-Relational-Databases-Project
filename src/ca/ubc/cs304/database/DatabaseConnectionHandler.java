@@ -986,7 +986,7 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE Cities (" +
-					"city char(40), " +
+					"city varchar(40), " +
 					"country char(40) NOT NULL, " +
 					"PRIMARY KEY (city)" +
 					")";
@@ -999,8 +999,8 @@ public class DatabaseConnectionHandler {
 
 		try {
 			String query = "CREATE TABLE Teams (" +
-					"tname char(40), " +
-					"city char(40), " +
+					"tname varchar(40), " +
+					"city varchar(40), " +
 					"winpercent integer, " +
 					"PRIMARY KEY (tname, city), " +
 					"FOREIGN KEY (city) REFERENCES Cities" +
@@ -1031,8 +1031,8 @@ public class DatabaseConnectionHandler {
 		try {
 			String query = "CREATE TABLE Players (" +
 					"jerseynumber integer, " +
-					"tname char(40), " +
-					"city char(40), " +
+					"tname varchar(40), " +
+					"city varchar(40), " +
 					"pname char(40) NOT NULL, " +
 					"height integer, " +
 					"weight integer, " +
@@ -1097,10 +1097,10 @@ public class DatabaseConnectionHandler {
 					"mid char(10), " +
 					"oname char(40) NOT NULL, " +
 					"stname char(40) NOT NULL, " +
-					"cityA char(40) NOT NULL, " +
-					"teamA char(40) NOT NULL, " +
-					"cityB char(40) NOT NULL, " +
-					"teamB char(40) NOT NULL, " +
+					"cityA varchar(40) NOT NULL, " +
+					"teamA varchar(40) NOT NULL, " +
+					"cityB varchar(40) NOT NULL, " +
+					"teamB varchar(40) NOT NULL, " +
 					"rentalfee integer, " +
 					"matchdate date, " +
 					"result char(10), " +
