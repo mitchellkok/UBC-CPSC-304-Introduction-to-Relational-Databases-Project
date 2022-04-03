@@ -44,96 +44,9 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
-	public void deleteBranch(int branchId) {
-		try {
-			String query = "DELETE FROM branch WHERE branch_id = ?";
-			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setInt(1, branchId);
 
-			int rowCount = ps.executeUpdate();
-			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " Branch " + branchId + " does not exist!");
-			}
 
-			connection.commit();
 
-			ps.close();
-		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-			rollbackConnection();
-		}
-	}
-
-	public void insertBranch(BranchModel model) {
-		try {
-			String query = "INSERT INTO branch VALUES (?,?,?,?,?)";
-			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setInt(1, model.getId());
-			ps.setString(2, model.getName());
-			ps.setString(3, model.getAddress());
-			ps.setString(4, model.getCity());
-			if (model.getPhoneNumber() == 0) {
-				ps.setNull(5, java.sql.Types.INTEGER);
-			} else {
-				ps.setInt(5, model.getPhoneNumber());
-			}
-
-			ps.executeUpdate();
-			connection.commit();
-
-			ps.close();
-		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-			rollbackConnection();
-		}
-	}
-
-	public BranchModel[] getBranchInfo() {
-		ArrayList<BranchModel> result = new ArrayList<BranchModel>();
-
-		try {
-			String query = "SELECT * FROM branch";
-			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ResultSet rs = ps.executeQuery();
-
-			while(rs.next()) {
-				BranchModel model = new BranchModel(rs.getString("branch_addr"),
-						rs.getString("branch_city"),
-						rs.getInt("branch_id"),
-						rs.getString("branch_name"),
-						rs.getInt("branch_phone"));
-				result.add(model);
-			}
-
-			rs.close();
-			ps.close();
-		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-		}
-
-		return result.toArray(new BranchModel[result.size()]);
-	}
-
-	public void updateBranch(int id, String name) {
-		try {
-			String query = "UPDATE branch SET branch_name = ? WHERE branch_id = ?";
-			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setString(1, name);
-			ps.setInt(2, id);
-
-			int rowCount = ps.executeUpdate();
-			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " Branch " + id + " does not exist!");
-			}
-
-			connection.commit();
-
-			ps.close();
-		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-			rollbackConnection();
-		}
-	}
 
 	// Player
 	public void deletePlayer(int jerseynumber, String tname, String city) {
@@ -385,6 +298,9 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
+
+
+
 	// Coach
 	public void deleteCoach(int clicensenumber) {
 		try {
@@ -537,8 +453,7 @@ public class DatabaseConnectionHandler {
 
 
 
-	// Teams
-	// TODO
+	// Team
 	public void deleteTeam(String tname, String city){
 		try {
 			String query = "DELETE FROM Teams WHERE tname = ? AND city = ?";
@@ -640,8 +555,6 @@ public class DatabaseConnectionHandler {
 	}
 
 
-
-
 	// Average winpercent of all teams
 	public void getAvgWinPercent() {
 		try{
@@ -720,8 +633,7 @@ public class DatabaseConnectionHandler {
 	}
 
 
-	// Matches
-	// TODO
+	// Match
 	public void deleteMatch(String mid){
 		try {
 			String query = "DELETE FROM matches WHERE mid = ?";
@@ -862,6 +774,8 @@ public class DatabaseConnectionHandler {
 
 		return result.toArray(new MatchesModel[result.size()]);
 	}
+
+
 
 	// TV
 	public void insertTV(TVModel model){
@@ -1264,11 +1178,6 @@ public class DatabaseConnectionHandler {
 			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 		}
 
-		BranchModel branch1 = new BranchModel("123 Charming Ave", "Vancouver", 1, "First Branch", 1234567);
-		insertBranch(branch1);
-
-		BranchModel branch2 = new BranchModel("123 Coco Ave", "Vancouver", 2, "Second Branch", 1234568);
-		insertBranch(branch2);
 
 		// Insert Teams
 		TeamsModel team1 = new TeamsModel("Liverpool", "Liverpool", 77);

@@ -1,6 +1,5 @@
 package ca.ubc.cs304.delegates;
 
-import ca.ubc.cs304.model.BranchModel;
 import ca.ubc.cs304.model.PlayersModel;
 import ca.ubc.cs304.model.CoachesModel;
 import ca.ubc.cs304.model.MatchesModel;
@@ -19,11 +18,6 @@ import java.util.Date;
  */
 public interface TerminalTransactionsDelegate {
 	public void databaseSetup();
-	
-	public void deleteBranch(int branchId);
-	public void insertBranch(BranchModel model);
-	public void showBranch();
-	public void updateBranch(int branchId, String name);
 
 	// Players
 	public void deletePlayer(int jerseynumber, String tname, String city);

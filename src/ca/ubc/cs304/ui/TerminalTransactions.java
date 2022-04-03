@@ -336,7 +336,7 @@ public class TerminalTransactions {
     }
 
     //===================================================================================================================================
-    // Players
+    // Player
     private void handleInsertPlayerOption() {
         int jerseynumber = INVALID_INPUT;
         while (jerseynumber == INVALID_INPUT) {
@@ -505,7 +505,7 @@ public class TerminalTransactions {
 
 
     //================================================================================================================
-    // Coaches
+    // Coach
     private void handleInsertCoachOption() {
         int clicensenumber = INVALID_INPUT;
         while (clicensenumber == INVALID_INPUT) {
@@ -633,7 +633,7 @@ public class TerminalTransactions {
 
 
     //===================================================================================================================
-    // Matches
+    // Match
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public void handleInsertMatchOption() {
@@ -755,57 +755,6 @@ public class TerminalTransactions {
 
 
     //=================================================================================================================
-    private void handleDeleteOption() {
-        int branchId = INVALID_INPUT;
-        while (branchId == INVALID_INPUT) {
-            System.out.print("Please enter the branch ID you wish to delete: ");
-            branchId = readInteger(false);
-            if (branchId != INVALID_INPUT) {
-                delegate.deleteBranch(branchId);
-            }
-        }
-    }
-
-    private void handleInsertOption() {
-        int id = INVALID_INPUT;
-        while (id == INVALID_INPUT) {
-            System.out.print("Please enter the branch ID you wish to insert: ");
-            id = readInteger(false);
-        }
-
-        String name = null;
-        while (name == null || name.length() <= 0) {
-            System.out.print("Please enter the branch name you wish to insert: ");
-            name = readLine().trim();
-        }
-
-        // branch address is allowed to be null so we don't need to repeatedly ask for the address
-        System.out.print("Please enter the branch address you wish to insert: ");
-        String address = readLine().trim();
-        if (address.length() == 0) {
-            address = null;
-        }
-
-        String city = null;
-        while (city == null || city.length() <= 0) {
-            System.out.print("Please enter the branch city you wish to insert: ");
-            city = readLine().trim();
-        }
-
-        int phoneNumber = INVALID_INPUT;
-        while (phoneNumber == INVALID_INPUT) {
-            System.out.print("Please enter the branch phone number you wish to insert: ");
-            phoneNumber = readInteger(true);
-        }
-
-        BranchModel model = new BranchModel(address,
-                city,
-                id,
-                name,
-                phoneNumber);
-        delegate.insertBranch(model);
-    }
-
     private void handleQuitOption() {
         System.out.println("Good Bye!");
 
@@ -820,21 +769,6 @@ public class TerminalTransactions {
         delegate.terminalTransactionsFinished();
     }
 
-    private void handleUpdateOption() {
-        int id = INVALID_INPUT;
-        while (id == INVALID_INPUT) {
-            System.out.print("Please enter the branch ID you wish to update: ");
-            id = readInteger(false);
-        }
-
-        String name = null;
-        while (name == null || name.length() <= 0) {
-            System.out.print("Please enter the branch name you wish to update: ");
-            name = readLine().trim();
-        }
-
-        delegate.updateBranch(id, name);
-    }
 
     private int readInteger(boolean allowEmpty) {
         String line = null;
