@@ -567,17 +567,6 @@ public class DatabaseConnectionHandler {
 			ps.setString(1, model.getTname());
 			ps.setString(2, model.getCity());
 			ps.setInt(3, model.getWinpercent());
-			if (model.getTname() == null) {
-				ps.setNull(1, java.sql.Types.INTEGER);
-			} else {
-				ps.setString(1, model.getTname());
-			}
-
-			if (model.getCity() == null) {
-				ps.setNull(2, java.sql.Types.INTEGER);
-			} else {
-				ps.setString(2, model.getCity());
-			}
 
 			if (model.getWinpercent() == -1) {
 				ps.setNull(3, java.sql.Types.INTEGER);
@@ -600,10 +589,14 @@ public class DatabaseConnectionHandler {
 		try {
 			String query = "UPDATE Teams SET winpercent = ? WHERE tname = ? AND city = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setString(1, tname);
-			ps.setString(2, city);
-			ps.setInt(3, winpercent);
+			ps.setString(2, tname);
+			ps.setString(3, city);
 
+			if (winpercent == -1) {
+				ps.setNull(1, java.sql.Types.INTEGER);
+			} else {
+				ps.setInt(1, winpercent);
+			}
 
 			int rowCount = ps.executeUpdate();
 			if (rowCount == 0) {
@@ -690,7 +683,7 @@ public class DatabaseConnectionHandler {
 	// Number of matches a team has played
 	public void getNumMatchPlayed() {
 		try{
-			String query = "SELECT COUNT(*) AS numMatches from (SELECT teamA FROM Matches UNION ALL SELECT teamB FROM Matches) group by teamA";
+			String query = "SELECT teamA, COUNT(*) AS numMatches from (SELECT teamA FROM Matches UNION ALL SELECT teamB FROM Matches) group by teamA";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
@@ -699,14 +692,17 @@ public class DatabaseConnectionHandler {
 				System.out.println(WARNING_TAG + " No city exists!");
 			}
 			else{
+				ArrayList<String> team = new ArrayList<String>();
 				ArrayList<String> result = new ArrayList<String>();
 				ResultSet rs = ps.executeQuery();
 				System.out.println();
 				while(rs.next()) {
+					team.add(rs.getString("teamA"));
 					result.add(rs.getString("numMatches"));
 				}
 
 				for (int i = 0; i < result.size(); i++) {
+					System.out.printf("%-20.20s", team.get(i));
 					System.out.printf("%-10.10s", result.get(i));
 					System.out.println();
 				}
