@@ -683,7 +683,7 @@ public class DatabaseConnectionHandler {
 	// Number of matches a team has played
 	public void getNumMatchPlayed() {
 		try{
-			String query = "SELECT COUNT(*) AS numMatches from (SELECT teamA FROM Matches UNION ALL SELECT teamB FROM Matches) group by teamA";
+			String query = "SELECT teamA, COUNT(*) AS numMatches from (SELECT teamA FROM Matches UNION ALL SELECT teamB FROM Matches) group by teamA";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			int rowCount = ps.executeUpdate();
@@ -692,14 +692,17 @@ public class DatabaseConnectionHandler {
 				System.out.println(WARNING_TAG + " No city exists!");
 			}
 			else{
+				ArrayList<String> team = new ArrayList<String>();
 				ArrayList<String> result = new ArrayList<String>();
 				ResultSet rs = ps.executeQuery();
 				System.out.println();
 				while(rs.next()) {
+					team.add(rs.getString("teamA"));
 					result.add(rs.getString("numMatches"));
 				}
 
 				for (int i = 0; i < result.size(); i++) {
+					System.out.printf("%-20.20s", team.get(i));
 					System.out.printf("%-10.10s", result.get(i));
 					System.out.println();
 				}
